@@ -10,5 +10,6 @@ export class RootContainer {
     constructor(private store: Store) { }
 
     ngOnInit() {
+        this.store.dispatch(new Actions.Initialized());
     }
 }

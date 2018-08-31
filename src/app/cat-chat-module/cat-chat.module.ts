@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { UserModule } from '../user-module/user.module';
 import { CommonModule } from '@angular/common';
 import { RootContainer } from './root/container/root.container';
 import { RootComponent } from './root/component/root.component';
@@ -18,8 +17,7 @@ import { MessageListComponent } from './group-chats/components/message-list/mess
   ],
   imports: [
     CommonModule,
-    GroupChatsModule,
-    UserModule
+    GroupChatsModule
   ],
   exports: [
     RootContainer
