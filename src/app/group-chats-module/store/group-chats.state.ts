@@ -33,7 +33,7 @@ export class GroupChatsState {
                 patchState({
                     groupChats: groupChats
                 });
-                asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatsSucceeded(groupChats)));
+                asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatsSucceeded()));
             }),
             catchError(error => {
                 return of(asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatsFailed(error))));
@@ -43,18 +43,6 @@ export class GroupChatsState {
 
     @Action(GroupChatsContainerActions.GroupChatSelected)
     fetchGroup({ patchState, dispatch }: StateContext<GroupChatsStateModel>, { groupChat }: GroupChatsContainerActions.GroupChatSelected) {
-        // return this.groupChatsService.fetchGroup(groupChatId).pipe(
-        //     tap(groupChat => {
-        //         console.log('groupChat', groupChat);
-        //         patchState({
-        //             selectedGroupChat: groupChat
-        //         });
-        //         asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatSucceeded(groupChat)));
-        //     }),
-        //     catchError(error => {
-        //         return of(asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatFailed(error))));
-        //     })
-        // );
         return this.groupChatsService.fetchMessages(groupChat.group_id).pipe(
             tap(messages => {
                 patchState({
