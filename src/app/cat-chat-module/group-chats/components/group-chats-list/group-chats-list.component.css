@@ -1,0 +1,8 @@
+.groupChat {
+	background: beige;
+
+}
+
+.groupChat.selected {
+	background: yellow;
+}
