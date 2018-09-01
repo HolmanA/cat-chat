@@ -4,6 +4,8 @@ import * as GroupChatsContainerActions from '../../cat-chat-module/group-chats/a
 import { catchError, tap } from "rxjs/operators";
 import { asapScheduler, of, Observable } from "rxjs";
 import { GroupChatsHttpService } from "../services/group-chats.service";
+import { FetchGroupsRequest } from "../services/models/groups/fetch-groups.request";
+import { FetchMessagesRequest } from "../services/models/messages/fetch-messages.request";
 
 export interface GroupChatsStateModel {
     groupChats: any[];
@@ -28,7 +30,8 @@ export class GroupChatsState {
 
     @Action(GroupChatsContainerActions.Initialized)
     fetchGroups({ patchState, dispatch }: StateContext<GroupChatsStateModel>) {
-        return this.groupChatsService.fetchGroups().pipe(
+        const request = new FetchGroupsRequest();
+        return this.groupChatsService.fetchGroups(request).pipe(
             tap(groupChats => {
                 patchState({
                     groupChats: groupChats
@@ -43,7 +46,9 @@ export class GroupChatsState {
 
     @Action(GroupChatsContainerActions.GroupChatSelected)
     fetchGroup({ patchState, dispatch }: StateContext<GroupChatsStateModel>, { groupChat }: GroupChatsContainerActions.GroupChatSelected) {
-        return this.groupChatsService.fetchMessages(groupChat.group_id).pipe(
+        const request: FetchMessagesRequest = new FetchMessagesRequest();
+        request.group_id = groupChat.group_id;
+        return this.groupChatsService.fetchMessages(request).pipe(
             tap(messages => {
                 patchState({
                     selectedGroupChat: { 

@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.chats-container {
+    width: 30%;
+    height: 50%;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.messages-container {
+    width: 70%;
+    height: 100%;
+    flex-grow: 1;
+    flex-shrink: 1;
+}

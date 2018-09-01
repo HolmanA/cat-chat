@@ -1,4 +1,4 @@
-<p>{{selectedGroupChat?.name}}</p>
+<p *ngIf="selectedGroupChat">{{selectedGroupChat.name}}</p>
 <div class="groupChat" *ngFor="let groupChat of groupChatsList" (click)="groupChatSelected.emit(groupChat)">
 	<h3 class="groupChat name">{{groupChat.name}}</h3>
 	<span class="groupChat preview-text">{{groupChat.messages.preview.text}}</span>
