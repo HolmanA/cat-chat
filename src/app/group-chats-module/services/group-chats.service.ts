@@ -123,6 +123,9 @@ export class GroupChatsHttpService {
 
   /****************** Members Endpoint *************************/
 
+  /**
+   * Adds members to a group
+   */
   addMembers(request: AddMembersRequest): Observable<any> {
     return this.httpClient.post<any>(`${this.BASE_URL}/${request.group_id}/members/add`, request.body).pipe(
       map(response => response.response),
@@ -130,6 +133,9 @@ export class GroupChatsHttpService {
     );
   }
 
+  /**
+   * Fetches the results of an @see addMembers call
+   */
   addMembersResults(request: AddMembersResultsRequest): Observable<any> {
     return this.httpClient.get<any>(`${this.BASE_URL}/${request.group_id}/members/results/${request.results_id}`).pipe(
       map(response => response.response),
@@ -137,6 +143,9 @@ export class GroupChatsHttpService {
     );
   }
 
+  /**
+   * Removes a member from a group
+   */
   removeMember(request: RemoveMemberRequest): Observable<any> {
     return this.httpClient.post<any>(`${this.BASE_URL}/${request.group_id}/members/${request.body.membership_id}/remove`, request.body).pipe(
       map(response => response.response),
@@ -147,6 +156,9 @@ export class GroupChatsHttpService {
   /****************** Memberships Endpoint *************************/
 
   // TODO: test this endpoint for valid request format
+  /**
+   * Updates this user's membership information for a group
+   */
   updateMembership(request: UpdateMembershipRequest): Observable<any> {
     return this.httpClient.post<any>(`${this.BASE_URL}/${request.group_id}/memberships/update`, request.body).pipe(
       map(response => response.response),
@@ -157,6 +169,9 @@ export class GroupChatsHttpService {
 
   /****************** Messages Endpoint *************************/
 
+  /**
+   * Fetches messages for a group
+   */
   fetchMessages(request: FetchMessagesRequest): Observable<any> {
     return this.httpClient.get<any>(`${environment.baseApiUrl}/${request.group_id}/messages?before_id=${request.before_id}&since_id=${request.since_id}&after_id=${request.after_id}&limit=${request.limit}`).pipe(
       map(response => response.response),
@@ -164,6 +179,9 @@ export class GroupChatsHttpService {
     );
   }
 
+  /**
+   * Creates a new message in a group
+   */
   createMessage(request: CreateMessageRequest): Observable<any> {
     return this.httpClient.post<any>(`${environment.baseApiUrl}/${request.group_id}/messages`, request.body).pipe(
       map(response => response.response),
