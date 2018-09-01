@@ -3,7 +3,7 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 @Component({
     selector: 'group-chats-list-component',
     templateUrl: './group-chats-list.component.html',
-    styleUrls: ['./group-chats-list.component.css']
+    styleUrls: ['./group-chats-list.component.less']
 })
 export class GroupChatsListComponent {
     @Input() groupChatsList: any[];
