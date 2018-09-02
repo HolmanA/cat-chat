@@ -1,4 +1,6 @@
-<div class="container">
-    <button (click)="send('testArg')" type="button"></button>
-    <input class="message-input" />
+<div class="input-group input-group-lg fixed">
+    <span class="input-group-btn">
+        <button class="btn btn-success" (click)="send()" type="button">Send</button>
+    </span>
+    <input class="form-control" type="text" [(ngModel)]="model.text"/>
 </div>

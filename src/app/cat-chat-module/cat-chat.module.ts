@@ -8,6 +8,7 @@ import { GroupChatsContainer } from './group-chats/container/group-chats.contain
 import { GroupMessagesContainer } from './group-messages/container/group-messages.container';
 import { GroupMessagesListComponent } from './group-messages/components/group-messages-list/group-messages-list.component';
 import { GroupMessageInputComponent } from './group-messages/components/group-message-input/group-message-input.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,8 @@ import { GroupMessageInputComponent } from './group-messages/components/group-me
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     GroupChatsModule
   ],
   exports: [

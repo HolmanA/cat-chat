@@ -7,8 +7,13 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 })
 export class GroupMessageInputComponent {
     @Output() sendMessage: EventEmitter<any> = new EventEmitter<any>();
+    model: any = {
+        text: ''
+    };
 
-    send(content: any) {
-        this.sendMessage.emit(content);
+    send() {
+        if (this.model.text && this.model.text.length > 0) {
+            this.sendMessage.emit(this.model);
+        }
     }
 }
