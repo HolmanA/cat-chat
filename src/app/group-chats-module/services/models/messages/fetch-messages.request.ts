@@ -3,5 +3,5 @@ export class FetchMessagesRequest {
     before_id: string = '';
     since_id: string = '';
     after_id: string = '';
-    limit: number = 20;
+    limit: number = 100;
 }
