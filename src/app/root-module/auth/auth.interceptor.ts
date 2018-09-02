@@ -3,6 +3,9 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
+/**
+ * @see HttpInterceptor implementation that injects the user's authentication token into all Http requests
+ */
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}

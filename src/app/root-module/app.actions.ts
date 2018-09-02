@@ -1,4 +1,6 @@
-export class Launched {
-    static readonly type = '[app] launched';
-    constructor(public authToken: string) {}
+/**
+ * Action alerting that the application component has been initialized.
+ */
+export class Initialized {
+    static readonly type = '[app] initialized';
 }

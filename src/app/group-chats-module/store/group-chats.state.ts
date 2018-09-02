@@ -4,6 +4,8 @@ import * as GroupChatsContainerActions from '../../cat-chat-module/group-chats/a
 import { catchError, tap } from "rxjs/operators";
 import { asapScheduler, of, Observable } from "rxjs";
 import { GroupChatsHttpService } from "../services/group-chats.service";
+import { FetchGroupsRequest } from "../services/models/groups/fetch-groups.request";
+import { FetchMessagesRequest } from "../services/models/messages/fetch-messages.request";
 
 export interface GroupChatsStateModel {
     groupChats: any[];
@@ -28,12 +30,13 @@ export class GroupChatsState {
 
     @Action(GroupChatsContainerActions.Initialized)
     fetchGroups({ patchState, dispatch }: StateContext<GroupChatsStateModel>) {
-        return this.groupChatsService.fetchGroups().pipe(
+        const request = new FetchGroupsRequest();
+        return this.groupChatsService.fetchGroups(request).pipe(
             tap(groupChats => {
                 patchState({
                     groupChats: groupChats
                 });
-                asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatsSucceeded(groupChats)));
+                asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatsSucceeded()));
             }),
             catchError(error => {
                 return of(asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatsFailed(error))));
@@ -43,19 +46,9 @@ export class GroupChatsState {
 
     @Action(GroupChatsContainerActions.GroupChatSelected)
     fetchGroup({ patchState, dispatch }: StateContext<GroupChatsStateModel>, { groupChat }: GroupChatsContainerActions.GroupChatSelected) {
-        // return this.groupChatsService.fetchGroup(groupChatId).pipe(
-        //     tap(groupChat => {
-        //         console.log('groupChat', groupChat);
-        //         patchState({
-        //             selectedGroupChat: groupChat
-        //         });
-        //         asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatSucceeded(groupChat)));
-        //     }),
-        //     catchError(error => {
-        //         return of(asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatFailed(error))));
-        //     })
-        // );
-        return this.groupChatsService.fetchMessages(groupChat.group_id).pipe(
+        const request: FetchMessagesRequest = new FetchMessagesRequest();
+        request.group_id = groupChat.group_id;
+        return this.groupChatsService.fetchMessages(request).pipe(
             tap(messages => {
                 patchState({
                     selectedGroupChat: { 
