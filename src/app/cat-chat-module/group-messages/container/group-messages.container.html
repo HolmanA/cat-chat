@@ -1,2 +1,4 @@
 <group-messages-list-component *ngIf="selectedGroupChat$ | async" [selectedGroupChat]="selectedGroupChat$ | async" [messageList]="(selectedGroupChat$ | async).messages.messages">
 </group-messages-list-component>
+<group-message-input-component *ngIf="selectedGroupChat$ | async" (sendMessage)="sendMessage($event)">
+</group-message-input-component>

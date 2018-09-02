@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'root-component',
@@ -6,5 +6,4 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
     styleUrls: ['./root.component.less']
 })
 export class RootComponent {
-    ngOnInit() { }
 }

@@ -1,6 +1,6 @@
-<div *ngFor="let message of messageList" class="message">
+<div *ngFor="let message of messageList.reverse()" class="message">
     <div class="sender-avatar">
-        <img src="{{message.avatar_url}}" alt="Sender Avatar" height="80%" width="80%"/>
+        <img src="{{message.avatar_url}}" alt="Sender Avatar" height="90px"/>
     </div>
     <div class="message-info">
         <div class="sender-name">

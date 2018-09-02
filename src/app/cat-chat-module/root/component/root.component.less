@@ -1,18 +1,21 @@
 .container {
-    display: flex;
-    flex-direction: row;
+    padding: 2px;
 }
 
 .chats-container {
-    width: 30%;
-    height: 50%;
-    flex-grow: 1;
-    flex-shrink: 1;
+    width: 22%;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: aqua;
+    overflow-x: hidden;
 }
 
 .messages-container {
-    width: 70%;
+    margin-left: 22%;
+    width: 78%;
     height: 100%;
-    flex-grow: 1;
-    flex-shrink: 1;
+    overflow: auto;
 }
