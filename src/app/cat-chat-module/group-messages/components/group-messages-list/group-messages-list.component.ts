@@ -7,13 +7,22 @@ import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, OnInit, 
 })
 export class GroupMessagesListComponent {
     @ViewChild('scrollView') private scrollView: ElementRef;
-    @Input() messageList: any[];
-    //@Input() selectedGroupChat: any;
+    private _messageList: any[];
     private _selectedGroupChat: any;
     shouldScroll: boolean = true;
 
     ngAfterViewInit(): void {
         this.scrollToBottom();
+    }
+
+    @Input()
+    set messageList(list: any[]) {
+        this._messageList = list;
+        this._messageList.reverse();
+    }
+
+    get messageList(): any[] {
+        return this._messageList;
     }
 
     @Input()
