@@ -19,6 +19,7 @@ export class GroupMessagesListComponent implements AfterViewInit {
 
     @Input()
     public set selectedGroupChat(selectedChat: any) {
+        console.log('set selectedGroupChat');
         this._selectedGroupChat = selectedChat;
         if (this.shouldScroll) {
             this.scrollToBottom();
@@ -26,6 +27,7 @@ export class GroupMessagesListComponent implements AfterViewInit {
     }
 
     public get selectedGroupChat(): any {
+        console.log('get selectedGroupChat');
         return this._selectedGroupChat;
     }
 
