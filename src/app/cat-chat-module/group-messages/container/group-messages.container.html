@@ -1,5 +1,5 @@
 <div *ngIf="selectedGroupChat$ | async">
-    <group-messages-list-component [selectedGroupChat]="selectedGroupChat$ | async" [messageList]="(selectedGroupChat$ | async).messages.messages">
+    <group-messages-list-component [selectedGroupChat]="selectedGroupChat$ | async" [messageList]="(selectedGroupChat$ | async).messages.messages.reverse()">
     </group-messages-list-component>
     <group-message-input-component (sendMessage)="sendMessage($event)">
     </group-message-input-component>
