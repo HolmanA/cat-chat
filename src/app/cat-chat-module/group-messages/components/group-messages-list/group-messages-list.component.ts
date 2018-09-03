@@ -19,6 +19,7 @@ export class GroupMessagesListComponent implements OnInit, AfterViewChecked {
     }
 
     private scrollToBottom(): void {
+        console.log('scroll to bottom');
         try {
             this.scrollView.nativeElement.scrollTop = this.scrollView.nativeElement.scrollHeight;
         } catch (error) {
