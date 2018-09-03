@@ -1,6 +1,6 @@
 <div class="message-list-wrapper" #scrollView>
     <div class="list-group">
-        <div *ngFor="let message of messageList.reverse()" class="message list-group-item">
+        <div *ngFor="let message of messageList" class="message list-group-item">
             <div class="sender-avatar">
                 <img src="{{message.avatar_url || 'https://i.groupme.com/549x549.jpeg.a00e1fbd97f24e0cba4a3dd53e789c33'}}" class="img-circle" alt="Sender Avatar" width="75px" height="75px"/>
             </div>
