@@ -19,7 +19,7 @@ import { FetchMessagesRequest } from './models/messages/fetch-messages.request';
 import { CreateMessageRequest } from './models/messages/create-message.request';
 
 /**
- * @see HttpClient wrapper making requests to GroupMe's 'groups/' end-point
+ * @see HttpClient wrapper making requests to GroupMe's 'groups' end-point
  */
 @Injectable()
 export class GroupChatsHttpService {

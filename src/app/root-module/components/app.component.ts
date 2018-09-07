@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { DOCUMENT } from '@angular/common';
-import { AuthService } from './auth/auth.service';
 import { Store } from '@ngxs/store';
-import * as Actions from './app.actions';
+import * as Actions from '../actions/app.actions';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
     selector: 'app-root',
@@ -11,7 +11,12 @@ import * as Actions from './app.actions';
     styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit { 
-    constructor(@Inject(DOCUMENT) private document: Document, private authService: AuthService, private store: Store) {
+    constructor(
+        @Inject(DOCUMENT) 
+        private document: Document, 
+        private authService: AuthService, 
+        private store: Store
+    ) {
         const token = environment.authToken || this.document.getElementById('authentication-token').innerText;
         this.authService.authToken = token;
     }

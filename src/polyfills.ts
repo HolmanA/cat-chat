@@ -73,6 +73,9 @@ import 'core-js/es7/reflect';
  */
 import 'zone.js/dist/zone';  // Included with Angular CLI.
 
+// BUGFIX: Allows angular 6 to work with socket.io-client node module
+// https://stackoverflow.com/questions/50356408/upgrading-to-angular-6-x-gives-uncaught-referenceerror-global-is-not-defined
+(window as any).global = window;
 
 
 /***************************************************************************************************

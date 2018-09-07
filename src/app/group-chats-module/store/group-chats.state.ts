@@ -1,6 +1,6 @@
 import { Action, StateContext, State } from "@ngxs/store";
 import * as GroupChatsStateActions from '../actions/group-chats.actions';
-import * as GroupChatsContainerActions from '../../cat-chat-module/group-chats/actions/group-chats-container.actions';
+import * as GroupChatsContainerActions from '../../ui-module/group-chats/actions/group-chats-container.actions';
 import { catchError, tap } from "rxjs/operators";
 import { asapScheduler, of, Observable } from "rxjs";
 import { GroupChatsHttpService } from "../services/group-chats.service";

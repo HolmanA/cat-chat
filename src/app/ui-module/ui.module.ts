@@ -30,4 +30,4 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     RootContainer
   ]
 })
-export class CatChatModule { }
+export class UIModule { }
