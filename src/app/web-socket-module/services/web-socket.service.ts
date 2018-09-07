@@ -81,7 +81,7 @@ export class WebSocketService {
      * Handles incoming handshake response
      * @param message The response message to @see sendHandshake
      */
-    private sendHandshakeResponseHandler(message: any): void {
+    private sendHandshakeResponseHandler(message: MessageEvent): void {
         const data = JSON.parse(message.data)[0];
         if (data.id === 1 && data.successful) {
             // Successfully executed handshake, subscribe to new message channel
@@ -113,11 +113,12 @@ export class WebSocketService {
      * Handles incoming subscription response 
      * @param message The response message to @see sendSubscribe
      */
-    private sendSubscribeResponseHandler(message: any): void {
+    private sendSubscribeResponseHandler(message: MessageEvent): void {
         const data = JSON.parse(message.data)[0];
         if (data.id === 2 && data.successful) {
             // Successfully connected to groupme websocket, set message handler to default
             this.websocket.onmessage = (message) => this.messageHandler(message);
+            this.store.dispatch(new Actions.ConnectionEstablished());
         }
     }
 
@@ -125,8 +126,12 @@ export class WebSocketService {
      * Default message handler
      * @param message Incoming message
      */
-    private messageHandler(message: any): void {
-        const data = JSON.parse(message.data)[0];
-        this.store.dispatch(new Actions.MessageReceived(data));
+    private messageHandler(messageEvent: MessageEvent): void {
+        const data = JSON.parse(messageEvent.data)[0].data;
+        if (data.type === 'ping') {
+            return;
+        } else if (data.subject) {
+            this.store.dispatch(new Actions.MessageReceived(data.subject));
+        }
     }
 }

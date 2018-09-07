@@ -4,6 +4,7 @@ import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngxs/store';
 import * as Actions from '../actions/app.actions';
 import { AuthService } from '../services/auth/auth.service';
+import { WebSocketService } from '../../web-socket-module/services/web-socket.service';
 
 @Component({
     selector: 'app-root',
@@ -15,6 +16,7 @@ export class AppComponent implements OnInit {
         @Inject(DOCUMENT) 
         private document: Document, 
         private authService: AuthService, 
+        private webSocketService: WebSocketService,
         private store: Store
     ) {
         const token = environment.authToken || this.document.getElementById('authentication-token').innerText;
