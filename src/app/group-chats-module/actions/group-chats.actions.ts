@@ -35,3 +35,22 @@ export class FetchGroupChatFailed {
 	 */
 	constructor(public message: any) { }
 }
+
+/**
+ * Action alerting that a request to create a message succeeded
+ */
+export class CreateMessageSucceeded {
+	static readonly type = '[group chats state] create message succeeded';
+}
+
+/**
+ * Action alerting that a request to create a message failed
+ */
+export class CreateMessageFailed {
+	static readonly type = '[group chats state] create message failed';
+	/**
+	 * @constructor
+	 * @param message the failure message
+	 */
+	constructor(public message: any) { }
+}

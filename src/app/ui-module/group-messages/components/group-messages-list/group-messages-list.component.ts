@@ -38,7 +38,6 @@ export class GroupMessagesListComponent {
     }
 
     private scrollToBottom(): void {
-        console.log('scroll to bottom');
         try {
             this.scrollView.nativeElement.scrollTop = this.scrollView.nativeElement.scrollHeight;
         } catch (error) {
