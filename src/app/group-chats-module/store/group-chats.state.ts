@@ -1,8 +1,8 @@
 import { v4 as uuid } from 'uuid';
 import { Action, StateContext, State } from "@ngxs/store";
 import * as GroupChatsStateActions from '../actions/group-chats.actions';
-import * as GroupChatsContainerActions from '../../cat-chat-module/group-chats/actions/group-chats-container.actions';
-import * as GroupMessagesContainerActions from '../../cat-chat-module/group-messages/actions/group-messages-container.actions';
+import * as GroupChatsContainerActions from '../../ui-module/group-chats/actions/group-chats-container.actions';
+import * as GroupMessagesContainerActions from '../../ui-module/group-messages/actions/group-messages-container.actions';
 import { catchError, tap } from "rxjs/operators";
 import { asapScheduler, of, Observable } from "rxjs";
 import { GroupChatsHttpService } from "../services/group-chats.service";
