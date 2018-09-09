@@ -1,21 +1,21 @@
 import { v4 as uuid } from 'uuid';
-import { Action, StateContext, State } from "@ngxs/store";
+import { Action, StateContext, State } from '@ngxs/store';
 import * as GroupChatsStateActions from '../actions/group-chats.actions';
 import * as GroupChatsContainerActions from '../../ui-module/group-chats/actions/group-chats-container.actions';
 import * as GroupMessagesContainerActions from '../../ui-module/group-messages/actions/group-messages-container.actions';
-import { catchError, tap } from "rxjs/operators";
-import { asapScheduler, of, Observable } from "rxjs";
-import { GroupChatsHttpService } from "../services/group-chats.service";
-import { FetchGroupsRequest } from "../services/models/groups/fetch-groups.request";
-import { FetchMessagesRequest } from "../services/models/messages/fetch-messages.request";
-import { CreateMessageRequest } from "../services/models/messages/create-message.request";
+import { catchError, tap } from 'rxjs/operators';
+import { asapScheduler, of, Observable } from 'rxjs';
+import { GroupChatsHttpService } from '../services/group-chats.service';
+import { FetchGroupsRequest } from '../services/models/groups/fetch-groups.request';
+import { FetchMessagesRequest } from '../services/models/messages/fetch-messages.request';
+import { CreateMessageRequest } from '../services/models/messages/create-message.request';
 
 export interface GroupChatsStateModel {
     groupChats: any[];
     selectedGroupChat: {
         id: string;
         messages: any;
-    }
+    };
     newMessage: any;
 }
 
@@ -23,7 +23,7 @@ const defaults: GroupChatsStateModel = {
     groupChats: [],
     selectedGroupChat: null,
     newMessage: null
-}
+};
 
 @State<GroupChatsStateModel>({
     name: 'groupChats',
@@ -58,7 +58,7 @@ export class GroupChatsState {
         return this.groupChatsService.fetchMessages(request).pipe(
             tap(messages => {
                 patchState({
-                    selectedGroupChat: { 
+                    selectedGroupChat: {
                         ...groupChat,
                         messages: messages
                     }
@@ -81,7 +81,7 @@ export class GroupChatsState {
         return this.groupChatsService.fetchMessages(request).pipe(
             tap(messages => {
                 patchState({
-                    selectedGroupChat: { 
+                    selectedGroupChat: {
                         ...selectedChat,
                         messages: messages
                     }

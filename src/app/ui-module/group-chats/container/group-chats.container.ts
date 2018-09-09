@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import * as Actions from '../actions/group-chats-container.actions';
@@ -8,7 +8,7 @@ import { GroupChatsSelectors } from '../../../group-chats-module/store/group-cha
     selector: 'group-chats-container',
     templateUrl: './group-chats.container.html'
 })
-export class GroupChatsContainer {
+export class GroupChatsContainer implements OnInit {
     @Select(GroupChatsSelectors.getGroupChats) groupChats$: Observable<any>;
     @Select(GroupChatsSelectors.getSelectedGroupChat) selectedGroupChat$: Observable<any>;
 

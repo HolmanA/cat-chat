@@ -6,7 +6,7 @@ import { UserSelectors } from '../../user-module/store/user.selectors';
 import { Observable } from 'rxjs';
 
 /**
- * Service used to connect to GroupMe's push-message websocket 
+ * Service used to connect to GroupMe's push-message websocket
  * Runs on its own and interacts with other components through selectors and actions
  */
 @Injectable()
@@ -18,7 +18,7 @@ export class WebSocketService {
     constructor(
         private store: Store,
         private authService: AuthService
-    ) { 
+    ) {
         // Reconnect to the websocket service if the user id is changed
         this.userId$.subscribe(id => {
             this.userId = id;
@@ -29,7 +29,7 @@ export class WebSocketService {
     /**
      * Re-initiate the connection
      */
-    private restart(): void { 
+    private restart(): void {
         this.websocket = new WebSocket('wss://push.groupme.com/faye');
 
         // Send handshake once connection is establlished
@@ -110,14 +110,14 @@ export class WebSocketService {
     }
 
     /**
-     * Handles incoming subscription response 
+     * Handles incoming subscription response
      * @param message The response message to @see sendSubscribe
      */
     private sendSubscribeResponseHandler(message: MessageEvent): void {
         const data = JSON.parse(message.data)[0];
         if (data.id === 2 && data.successful) {
             // Successfully connected to groupme websocket, set message handler to default
-            this.websocket.onmessage = (message) => this.messageHandler(message);
+            this.websocket.onmessage = (messageEvent) => this.messageHandler(messageEvent);
             this.store.dispatch(new Actions.ConnectionEstablished());
         }
     }

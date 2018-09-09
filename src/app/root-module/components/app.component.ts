@@ -11,12 +11,12 @@ import { WebSocketService } from '../../web-socket-module/services/web-socket.se
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.less']
 })
-export class AppComponent implements OnInit { 
+export class AppComponent implements OnInit {
     constructor(
-        @Inject(DOCUMENT) 
-        private document: Document, 
-        private authService: AuthService, 
-        private webSocketService: WebSocketService,
+        @Inject(DOCUMENT)
+        private document: Document,
+        private authService: AuthService,
+        private webSocketService: WebSocketService, // Do Not Delete: This is needed to initialize the websocket service with the di system
         private store: Store
     ) {
         const token = environment.authToken || this.document.getElementById('authentication-token').innerText;

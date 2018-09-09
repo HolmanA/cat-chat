@@ -1,15 +1,15 @@
-import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, OnInit, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 @Component({
     selector: 'group-messages-list-component',
     templateUrl: './group-messages-list.component.html',
     styleUrls: ['./group-messages-list.component.less']
 })
-export class GroupMessagesListComponent {
+export class GroupMessagesListComponent implements AfterViewInit {
     @ViewChild('scrollView') private scrollView: ElementRef;
     private _messageList: any[];
     private _selectedGroupChat: any;
-    shouldScroll: boolean = true;
+    shouldScroll = true;
 
     ngAfterViewInit(): void {
         this.scrollToBottom();

@@ -14,5 +14,5 @@ export class CreateMessageRequest {
                 charmap?: any; // type = 'emoji'
             }]
         }
-    }
+    };
 }
