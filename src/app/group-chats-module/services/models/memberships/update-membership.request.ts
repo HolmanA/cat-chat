@@ -4,5 +4,5 @@ export class UpdateMembershipRequest {
         membership: {
             nickname: string;
         }
-    }
+    };
 }

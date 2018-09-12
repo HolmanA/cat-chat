@@ -1,7 +1,7 @@
-import { Action, StateContext, State } from "@ngxs/store";
-import { catchError, tap } from "rxjs/operators";
-import { asapScheduler, of, Observable } from "rxjs";
-import { UserHttpService } from "../services/user.service";
+import { Action, StateContext, State } from '@ngxs/store';
+import { catchError, tap } from 'rxjs/operators';
+import { asapScheduler, of, Observable } from 'rxjs';
+import { UserHttpService } from '../services/user.service';
 import * as AppComponentActions from '../../root-module/actions/app.actions';
 import * as UserStateActions from '../actions/user.actions';
 
@@ -11,7 +11,7 @@ export interface UserStateModel {
 
 const defaults: UserStateModel = {
     user: null
-}
+};
 
 @State<UserStateModel>({
     name: 'user',

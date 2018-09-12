@@ -6,5 +6,5 @@ export class UpdateGroupRequest {
         image_url?: string;
         office_mode?: boolean;
         share?: boolean;
-    }
+    };
 }

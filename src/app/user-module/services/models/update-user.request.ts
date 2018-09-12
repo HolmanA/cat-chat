@@ -1,3 +1,3 @@
 export class UpdateUserRequest {
-    body: {}
+    body: {};
 }

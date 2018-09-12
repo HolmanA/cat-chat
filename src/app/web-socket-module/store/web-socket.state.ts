@@ -1,4 +1,4 @@
-import { Action, StateContext, State } from "@ngxs/store";
+import { Action, StateContext, State } from '@ngxs/store';
 import * as WebSocketServiceActions from '../actions/web-socket.actions';
 
 export interface WebSocketStateModel {
@@ -7,9 +7,9 @@ export interface WebSocketStateModel {
 }
 
 const defaults: WebSocketStateModel = {
-    isOpen: false, 
+    isOpen: false,
     messages: []
-}
+};
 
 @State<WebSocketStateModel>({
     name: 'websocket',
