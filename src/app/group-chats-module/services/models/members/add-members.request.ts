@@ -8,5 +8,5 @@ export class AddMembersRequest {
             email?: string;
             guid?: string;
         }];
-    }
+    };
 }

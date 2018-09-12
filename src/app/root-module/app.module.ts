@@ -1,12 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
+import { AppComponent } from './components/app.component';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { CatChatModule } from '../cat-chat-module/cat-chat.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthService } from './auth/auth.service';
-import { AuthInterceptor } from './auth/auth.interceptor';
+import { UIModule } from '../ui-module/ui.module';
+import { AuthService } from './services/auth/auth.service';
+import { AuthInterceptor } from './services/auth/auth.interceptor';
+import { WebSocketModule } from '../web-socket-module/web-socket.module';
+import { UserModule } from '../user-module/user.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     BrowserModule,
     NgxsModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
-    CatChatModule
+    WebSocketModule,
+    UserModule,
+    UIModule
   ],
   providers: [
     AuthService,

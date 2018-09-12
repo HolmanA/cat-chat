@@ -1,0 +1,6 @@
+<div *ngIf="selectedGroupChatMessages$ | async">
+    <group-messages-list-component [selectedGroupChat]="selectedGroupChatDetails$ | async" [messagePageList]="selectedGroupChatMessages$ | async" (scrolledToTop)="scrolledToTop()">
+    </group-messages-list-component>
+    <group-message-input-component (sendMessage)="sendMessage($event)">
+    </group-message-input-component>
+</div>
