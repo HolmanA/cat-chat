@@ -15,11 +15,20 @@ export class GroupChatsSelectors {
     }
 
     /**
-	 * Returns the currently selected group chat
+	 * Returns the currently selected group chat's details
 	 * @param state @see GroupChatsStateModel
 	 */
     @Selector([GroupChatsState])
-    static getSelectedGroupChat(state: GroupChatsStateModel) {
-        return state.selectedGroupChat;
+    static getSelectedChatDetails(state: GroupChatsStateModel) {
+        return state.selectedGroupChat.chat;
+    }
+
+    /**
+	 * Returns the currently selected group chat's messages
+	 * @param state @see GroupChatsStateModel
+	 */
+    @Selector([GroupChatsState])
+    static getSelectedChatMessages(state: GroupChatsStateModel) {
+        return state.selectedGroupChat.messages;
     }
 }

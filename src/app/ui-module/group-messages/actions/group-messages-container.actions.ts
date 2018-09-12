@@ -16,3 +16,10 @@ export class SendMessage {
 	 */
     constructor(public content: any) { }
 }
+
+/**
+ * Action alerting that the user has scrolled to the top of the messages list.
+ */
+export class ScrolledToTop {
+    static readonly type = '[group messages container] scrolled to top';
+}

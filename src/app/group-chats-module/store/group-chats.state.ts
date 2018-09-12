@@ -13,15 +13,18 @@ import { CreateMessageRequest } from '../services/models/messages/create-message
 export interface GroupChatsStateModel {
     groupChats: any[];
     selectedGroupChat: {
-        id: string;
-        messages: any;
+        chat: any;
+        messages: any[];
     };
     newMessage: any;
 }
 
 const defaults: GroupChatsStateModel = {
     groupChats: [],
-    selectedGroupChat: null,
+    selectedGroupChat: {
+        chat: null,
+        messages: []
+    },
     newMessage: null
 };
 
@@ -59,8 +62,8 @@ export class GroupChatsState {
             tap(messages => {
                 patchState({
                     selectedGroupChat: {
-                        ...groupChat,
-                        messages: messages
+                        chat: groupChat,
+                        messages: [messages]
                     }
                 });
                 asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatSucceeded()));
@@ -71,18 +74,44 @@ export class GroupChatsState {
         );
     }
 
-    @Action(GroupChatsStateActions.CreateMessageSucceeded)
-    refreshMessages({ patchState, getState, dispatch }: StateContext<GroupChatsStateModel>) {
+    @Action(GroupMessagesContainerActions.ScrolledToTop)
+    loadMoreMessages({ patchState, getState, dispatch }: StateContext<GroupChatsStateModel>) {
         const selectedChat = getState().selectedGroupChat;
+        const oldestMessageId = selectedChat.messages[0][0].id;
         const request: FetchMessagesRequest = new FetchMessagesRequest();
-        request.group_id = selectedChat.id;
-
+        request.group_id = selectedChat.chat.id;
+        request.before_id = oldestMessageId;
 
         return this.groupChatsService.fetchMessages(request).pipe(
             tap(messages => {
                 patchState({
                     selectedGroupChat: {
-                        ...selectedChat,
+                        chat: selectedChat.chat,
+                        messages: [
+                            messages,
+                            ...selectedChat.messages
+                        ]
+                    }
+                });
+                asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.LoadMoreMessagesSucceeded()));
+            }),
+            catchError(error => {
+                return of(asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.LoadMoreMessagesFailed(error))));
+            })
+        );
+    }
+
+    @Action(GroupChatsStateActions.CreateMessageSucceeded)
+    refreshMessages({ patchState, getState, dispatch }: StateContext<GroupChatsStateModel>) {
+        const selectedChat = getState().selectedGroupChat;
+        const request: FetchMessagesRequest = new FetchMessagesRequest();
+        request.group_id = selectedChat.chat.id;
+
+        return this.groupChatsService.fetchMessages(request).pipe(
+            tap(messages => {
+                patchState({
+                    selectedGroupChat: {
+                        chat: selectedChat,
                         messages: messages
                     }
                 });
@@ -104,7 +133,7 @@ export class GroupChatsState {
             }
         };
         const request: CreateMessageRequest = new CreateMessageRequest();
-        request.group_id = state.selectedGroupChat.id;
+        request.group_id = state.selectedGroupChat.chat.id;
         request.body = body;
 
         return this.groupChatsService.createMessage(request).pipe(

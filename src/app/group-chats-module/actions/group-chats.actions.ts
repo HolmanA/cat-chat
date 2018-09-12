@@ -54,3 +54,22 @@ export class CreateMessageFailed {
 	 */
     constructor(public message: any) { }
 }
+
+/**
+ * Action alerting that a request to load more messages succeeded
+ */
+export class LoadMoreMessagesSucceeded {
+    static readonly type = '[group chats state] load more messagessucceeded';
+}
+
+/**
+ * Action alerting that a request to load more messages failed
+ */
+export class LoadMoreMessagesFailed {
+    static readonly type = '[group chats state] load more messages failed';
+    /**
+	 * @constructor
+	 * @param message the failure message
+	 */
+    constructor(public message: any) { }
+}

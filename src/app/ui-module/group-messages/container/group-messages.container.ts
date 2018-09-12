@@ -9,7 +9,8 @@ import { GroupChatsSelectors } from '../../../group-chats-module/store/group-cha
     templateUrl: './group-messages.container.html'
 })
 export class GroupMessagesContainer implements OnInit {
-    @Select(GroupChatsSelectors.getSelectedGroupChat) selectedGroupChat$: Observable<any>;
+    @Select(GroupChatsSelectors.getSelectedChatDetails) selectedGroupChatDetails$: Observable<any>;
+    @Select(GroupChatsSelectors.getSelectedChatMessages) selectedGroupChatMessages$: Observable<any[]>;
 
     constructor(private store: Store) { }
 
@@ -19,5 +20,9 @@ export class GroupMessagesContainer implements OnInit {
 
     sendMessage(content: any) {
         this.store.dispatch(new Actions.SendMessage(content));
+    }
+
+    scrolledToTop() {
+        this.store.dispatch(new Actions.ScrolledToTop());
     }
 }

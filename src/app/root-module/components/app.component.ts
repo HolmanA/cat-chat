@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
         private webSocketService: WebSocketService, // Do Not Delete: This is needed to initialize the websocket service with the di system
         private store: Store
     ) {
-        const token = environment.authToken || this.document.getElementById('authentication-token').innerText;
+        const token = environment.authToken || document.getElementById('authentication-token').innerText;
         this.authService.authToken = token;
     }
 

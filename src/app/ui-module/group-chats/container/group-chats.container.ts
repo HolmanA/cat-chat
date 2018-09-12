@@ -10,7 +10,7 @@ import { GroupChatsSelectors } from '../../../group-chats-module/store/group-cha
 })
 export class GroupChatsContainer implements OnInit {
     @Select(GroupChatsSelectors.getGroupChats) groupChats$: Observable<any>;
-    @Select(GroupChatsSelectors.getSelectedGroupChat) selectedGroupChat$: Observable<any>;
+    @Select(GroupChatsSelectors.getSelectedChatDetails) selectedGroupChat$: Observable<any>;
 
     constructor(private store: Store) { }
 

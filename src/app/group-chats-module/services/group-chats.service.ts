@@ -147,8 +147,8 @@ export class GroupChatsHttpService {
      * Removes a member from a group
      */
     removeMember(request: RemoveMemberRequest): Observable<any> {
-        return this.httpClient.post<any>(`${this.BASE_URL}/${request.group_id}
-                /members/${request.body.membership_id}/remove`, request.body).pipe(
+        return this.httpClient.post<any>(`${this.BASE_URL}/${request.group_id}` +
+                `/members/${request.body.membership_id}/remove`, request.body).pipe(
             map(response => response.response),
             catchError(this.handleError)
             );
@@ -174,9 +174,9 @@ export class GroupChatsHttpService {
      * Fetches messages for a group
      */
     fetchMessages(request: FetchMessagesRequest): Observable<any> {
-        return this.httpClient.get<any>(`${this.BASE_URL}/${request.group_id}/messages?before_id=${request.before_id}
-                &since_id=${request.since_id}&after_id=${request.after_id}&limit=${request.limit}`).pipe(
-            map(response => response.response),
+        return this.httpClient.get<any>(`${this.BASE_URL}/${request.group_id}/messages?before_id=${request.before_id}` +
+                `&since_id=${request.since_id}&after_id=${request.after_id}&limit=${request.limit}`).pipe(
+            map(response => response.response.messages.reverse()),
             catchError(this.handleError)
         );
     }
