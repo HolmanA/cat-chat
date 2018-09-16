@@ -1,0 +1,46 @@
+:host {
+    flex-basis: 100%;
+    overflow-y: auto;
+}
+
+.message {
+    display: flex;
+    padding: 15px 20px 15px 20px;
+    background-color: #171C2A;
+    justify-content: space-between;
+
+    &.sent {
+        background-color: transparent;
+    }
+
+    .message-info {
+        margin-left: 15px;
+        flex-grow: 1;
+
+        .sender-name {
+            font-size: .9em;
+            font-weight: 600;
+        }
+
+        .message-text {
+            font-size: 1em;
+            font-weight: normal;
+            opacity: 0.8;
+        }
+
+        .message-created-at {
+            font-size: .9em;
+            opacity: 0.4;
+        }
+    }
+
+    .like-counter {
+        padding: 10px 5px 0px 15px;
+        font-size: 1em;
+        font-weight: 600;
+    }
+}
+
+img {
+    object-fit: cover;
+}

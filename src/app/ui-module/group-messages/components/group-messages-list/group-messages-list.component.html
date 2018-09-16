@@ -1,0 +1,21 @@
+<div *ngFor="let page of messagePageList; let i = index" id="message-page-{{i}}">
+    <div *ngFor="let message of page; let j = index" id="message-{{i}}-{{j}}" class="message" [ngClass]="{'sent': userId === message.sender_id}">
+        <div class="sender-avatar">
+            <img src="{{message.avatar_url || 'https://i.groupme.com/549x549.jpeg.a00e1fbd97f24e0cba4a3dd53e789c33'}}" class="img-circle" alt="Sender Avatar" width="60px" height="60px"/>
+        </div>
+        <div class="message-info">
+            <div class="sender-name">
+                {{message.name}}
+            </div>
+            <div class="message-text">
+                {{message.text}}
+            </div>
+            <div class="message-created-at">
+                {{message.created_at}}
+            </div>
+        </div>
+        <div *ngIf="message.favorited_by.length > 0" class="like-counter">
+            {{message.favorited_by.length}}
+        </div>
+    </div>
+</div>
