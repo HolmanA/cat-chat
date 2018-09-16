@@ -1,7 +1,14 @@
-<h2 class="list-title">Groups</h2>
+<div class="list-title">Groups</div>
 <div class="chats-container" #scrollView>
-	<div class="chat" *ngFor="let groupChat of groupChatsList" (click)="groupChatSelected.emit(groupChat)">
-		<h3 class="chat-name">{{groupChat.name}}</h3>
-		<span class="chat-preview">{{groupChat.messages.preview.text}}</span>
+	<div *ngFor="let groupChat of groupChatsList" class="chat" [ngClass]="{'selected': groupChat.id === selectedGroupChat?.id}" (click)="groupChatSelected.emit(groupChat)">
+        <div class="avatar">
+            <img src="{{groupChat.image_url || 'https://i.groupme.com/549x549.jpeg.a00e1fbd97f24e0cba4a3dd53e789c33'}}" class="img-circle" alt="Sender Avatar" width="65px" height="65px"/>
+        </div>
+		<div class="preview">
+			<div class="name">{{groupChat.name}}</div>
+			<div class="message">
+				{{groupChat.messages.preview.nickname}}: {{groupChat.messages.preview.text}}
+			</div>
+		</div>
 	</div>
 </div>
