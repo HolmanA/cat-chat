@@ -5,19 +5,50 @@
 }
 
 .list-title {
+    font-size: 1em;
+    font-weight: normal;
     opacity: 0.4;
+    padding: 5px 0px;
 }
 
 .chats-container {
     overflow-y: auto;
 
     .chat {
-        .chat-name {
+        display: flex;
+        margin: 10px 0px;
+        padding: 10px;
+        justify-content: space-between;
 
+        &:hover {
+            cursor: pointer;
         }
 
-        .chat-preview {
-            opacity: 0.6;
+        .preview {
+            flex-grow: 1;
+            margin-left: 15px;
+
+            .name {
+                font-size: .9em;
+                font-weight: 600;
+            }
+
+            .message {
+                font-size: 1em;
+                font-weight: normal;
+                opacity: 0.6;
+            }
+        }
+
+        &.selected {
+            background-color: #F3C716;
+            border-radius: 4px;
+
+            .preview {
+                .message {
+                    opacity: 1.0;
+                }
+            }
         }
     }
 }
