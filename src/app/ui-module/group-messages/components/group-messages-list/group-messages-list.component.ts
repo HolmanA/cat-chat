@@ -6,11 +6,13 @@ import { Component, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEm
     styleUrls: ['./group-messages-list.component.less']
 })
 export class GroupMessagesListComponent implements AfterViewInit {
-    @ViewChild('scrollView') private scrollView: ElementRef;
+    @Input() userId: string;
     @Output() scrolledToTop: EventEmitter<any> = new EventEmitter<any>();
 
     private _messagePageList: any[];
     private _selectedGroupChat: any;
+
+    constructor(private elementRef: ElementRef) { }
 
     ngAfterViewInit(): void {
         this.initializeScroll();
@@ -42,8 +44,8 @@ export class GroupMessagesListComponent implements AfterViewInit {
     }
 
     private initializeScroll(): void {
-        this.scrollView.nativeElement.addEventListener('scroll', () => {
-            const nativeElement = this.scrollView.nativeElement;
+        this.elementRef.nativeElement.addEventListener('scroll', () => {
+            const nativeElement = this.elementRef.nativeElement;
 
             if (nativeElement.scrollTop === 0) {
                 this.scrolledToTop.emit();
@@ -53,7 +55,7 @@ export class GroupMessagesListComponent implements AfterViewInit {
 
     private scrollToBottom(): void {
         try {
-            this.scrollView.nativeElement.scrollTop = this.scrollView.nativeElement.scrollHeight;
+            this.elementRef.nativeElement.scrollTop = this.elementRef.nativeElement.scrollHeight;
         } catch (error) {
             console.error('scroll error', error);
         }
