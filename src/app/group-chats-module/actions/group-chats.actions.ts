@@ -59,7 +59,7 @@ export class CreateMessageFailed {
  * Action alerting that a request to load more messages succeeded
  */
 export class LoadMoreMessagesSucceeded {
-    static readonly type = '[group chats state] load more messagessucceeded';
+    static readonly type = '[group chats state] load more messages succeeded';
 }
 
 /**
@@ -67,6 +67,44 @@ export class LoadMoreMessagesSucceeded {
  */
 export class LoadMoreMessagesFailed {
     static readonly type = '[group chats state] load more messages failed';
+    /**
+	 * @constructor
+	 * @param message the failure message
+	 */
+    constructor(public message: any) { }
+}
+
+/**
+ * Action alerting that a request to like a message succeeded
+ */
+export class LikeMessageSucceeded {
+    static readonly type = '[group chats state] like message succeeded';
+}
+
+/**
+ * Action alerting that a request to like a message failed
+ */
+export class LikeMessageFailed {
+    static readonly type = '[group chats state] like message failed';
+    /**
+	 * @constructor
+	 * @param message the failure message
+	 */
+    constructor(public message: any) { }
+}
+
+/**
+ * Action alerting that a request to unlike a message succeeded
+ */
+export class UnlikeMessageSucceeded {
+    static readonly type = '[group chats state] unlike message succeeded';
+}
+
+/**
+ * Action alerting that a request to unlike a message failed
+ */
+export class UnlikeMessageFailed {
+    static readonly type = '[group chats state] unlike message failed';
     /**
 	 * @constructor
 	 * @param message the failure message
