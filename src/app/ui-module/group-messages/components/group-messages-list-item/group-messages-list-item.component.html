@@ -1,0 +1,20 @@
+<div class="message" [ngClass]="{'sent': userId === message.sender_id}">
+    <img src="{{message.avatar_url || 'https://i.groupme.com/549x549.jpeg.a00e1fbd97f24e0cba4a3dd53e789c33'}}" class="img-circle" alt="Sender Avatar" width="60px" height="60px"/>
+    <div class="message-info">
+        <div class="sender-name">
+            {{message.name}}
+        </div>
+        <div class="message-text">
+            {{message.text}}
+        </div>
+        <div class="message-created-at">
+            {{message.created_at}}
+        </div>
+    </div>
+    <div class="like-box">
+        <img [src]="message.favorited_by?.includes(userId) ? 'assets/like-cat-active.png' : 'assets/like-cat.png'" class="like-icon" alt="Like Icon" height="40px" (click)="likeMessage.emit()"/>
+        <span *ngIf="message.favorited_by.length > 0" class="like-counter">
+            {{message.favorited_by.length}}
+        </span>
+    </div>
+</div>
