@@ -1,0 +1,3 @@
+<div *ngFor="let page of messagePageList; let i = index" id="message-page-{{i}}">
+    <group-messages-list-item-container *ngFor="let message of page; let j = index" id="message-{{i}}-{{j}}" [message]="message"></group-messages-list-item-container> 
+</div>

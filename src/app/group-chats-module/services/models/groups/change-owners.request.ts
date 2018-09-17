@@ -5,5 +5,5 @@ export class ChangeOwnersRequest {
             group_id: string;
             owner_id: string;
         }]
-    }
+    };
 }

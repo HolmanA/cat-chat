@@ -1,0 +1,29 @@
+.root-container {
+    display: flex;
+    min-height: 100vh;
+    max-height: 100vh;
+    background-color: #111520;
+    color: #ffffff;
+    font-family: 'Segoe UI';
+
+    .chats-container {
+        padding: 20px;
+        flex-basis: 22%;
+        display: flex;
+        flex-direction: column;
+        border-right: 2px #222B43 solid;
+
+        .chats-list-container {
+            max-height: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    .messages-container {
+        flex-basis: 78%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+}
