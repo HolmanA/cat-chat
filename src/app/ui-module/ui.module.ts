@@ -9,12 +9,16 @@ import { GroupMessagesContainer } from './group-messages/container/group-message
 import { GroupMessagesListComponent } from './group-messages/components/group-messages-list/group-messages-list.component';
 import { GroupMessageInputComponent } from './group-messages/components/group-message-input/group-message-input.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GroupMessagesListItemComponent } from './group-messages/components/group-messages-list-item/group-messages-list-item.component';
+import { GroupMessagesListItemContainer } from './group-messages/container/group-messages-list-item.container';
 
 @NgModule({
   declarations: [
     GroupChatsListComponent,
     GroupChatsContainer,
     GroupMessagesListComponent,
+    GroupMessagesListItemComponent,
+    GroupMessagesListItemContainer,
     GroupMessageInputComponent,
     GroupMessagesContainer,
     RootComponent,
