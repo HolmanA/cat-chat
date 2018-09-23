@@ -1,29 +1,53 @@
+@import '../../../../less/variables.less';
+
 .root-container {
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
     max-height: 100vh;
-    background-color: #111520;
-    color: #ffffff;
+    background-color: @deep-blue;
+    color: white;
     font-family: 'Segoe UI';
 
-    .chats-container {
-        padding: 20px;
-        flex-basis: 22%;
+    .header-container {
         display: flex;
-        flex-direction: column;
-        border-right: 2px #222B43 solid;
+        flex-shrink: 0;
+        border-bottom: @border-thin @border-blue solid;
 
-        .chats-list-container {
-            max-height: 50%;
-            display: flex;
-            flex-direction: column;
+        .user-container {
+            padding: @margin-medium;
+            flex-basis: 22%;
+            border-right: @border-thin @border-blue solid;
+        }
+
+        .chat-info-container {
+            flex-basis: 78%;
         }
     }
 
-    .messages-container {
-        flex-basis: 78%;
+    .body-container {
         display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
+        flex-grow: 1;
+
+        .chats-container {
+            padding: @margin-medium;
+            flex-basis: 22%;
+            display: flex;
+            flex-direction: column;
+            border-right: @border-thin @border-blue solid;
+
+            .chats-list-container {
+                max-height: 50%;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        .messages-container {
+            flex-basis: 78%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
     }
 }

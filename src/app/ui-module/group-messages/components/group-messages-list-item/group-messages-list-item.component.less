@@ -1,6 +1,8 @@
+@import '../../../../../less/variables.less';
+
 .message {
     display: flex;
-    padding: 15px 20px 15px 20px;
+    padding: @margin-small @margin-medium @margin-small @margin-medium;
     background-color: #171C2A;
     justify-content: space-between;
 
@@ -14,7 +16,7 @@
     }
 
     .message-info {
-        margin-left: 15px;
+        margin-left: @margin-small;
         flex-grow: 1;
 
         .sender-name {
@@ -35,23 +37,7 @@
     }
 
     .like-box {
-        padding: 10px 5px 0px 15px;
-
-        .dot {
-            height: 25px;
-            width: 25px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
-
-            &:hover {
-                cursor: pointer;
-            }
-
-            &.liked {
-                background-color: #F3C716;
-            }
-        }
+        padding: @margin-xsmall @margin-tiny @margin-none @margin-small;
 
         .like-icon {
 
