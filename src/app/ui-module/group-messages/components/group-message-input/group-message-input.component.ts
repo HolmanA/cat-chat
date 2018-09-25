@@ -15,5 +15,6 @@ export class GroupMessageInputComponent {
         if (this.model.text && this.model.text.length > 0) {
             this.sendMessage.emit(this.model);
         }
+        this.model.text = '';
     }
 }
