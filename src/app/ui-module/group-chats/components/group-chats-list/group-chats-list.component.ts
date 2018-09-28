@@ -25,4 +25,12 @@ export class GroupChatsListComponent implements AfterViewInit {
             }
         });
     }
+
+    public trimMessage(message: string): string {
+        if (message.length > 50) {
+            return message.substring(0,49).trim() + '...';
+        } else {
+            return message
+        }
+    }
 }
