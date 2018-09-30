@@ -2,39 +2,28 @@
 
 .root-container {
     display: flex;
-    flex-direction: column;
     min-height: 100vh;
     max-height: 100vh;
     background-color: @deep-blue;
     color: white;
     font-family: 'Segoe UI';
 
-    .header-container {
-        display: flex;
+    .side-menu-container {
+        flex-basis: 22%;
         flex-shrink: 0;
-        border-bottom: @border-thin @border-blue solid;
+        display: flex;
+        flex-direction: column;
+        border-right: @border-thin @border-blue solid;
 
         .user-container {
             padding: @margin-medium;
-            flex-basis: 22%;
-            border-right: @border-thin @border-blue solid;
+            border-bottom: @border-thin @border-blue solid;
         }
-
-        .chat-info-container {
-            flex-basis: 78%;
-        }
-    }
-
-    .body-container {
-        display: flex;
-        flex-grow: 1;
 
         .chats-container {
             padding: @margin-medium;
-            flex-basis: 22%;
             display: flex;
             flex-direction: column;
-            border-right: @border-thin @border-blue solid;
 
             .chats-list-container {
                 max-height: 50%;
@@ -42,10 +31,15 @@
                 flex-direction: column;
             }
         }
+    }
+
+    .body-container {
+        display: flex;
+        flex-grow: 1;
 
         .messages-container {
-            flex-basis: 78%;
             display: flex;
+            flex-grow: 1;
             flex-direction: column;
             justify-content: flex-end;
         }

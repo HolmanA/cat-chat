@@ -6,4 +6,7 @@ import { Component, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEm
     styleUrls: ['./user.component.less']
 })
 export class UserComponent {
+    @Input() user: any;
+
+    userDetailsOpen = false;
 }

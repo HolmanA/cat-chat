@@ -14,6 +14,7 @@ import { GroupMessagesListItemContainer } from './group-messages/container/group
 import { UserComponent } from './user/components/user/user.component';
 import { UserContainer } from './user/container/user.container';
 import { UserModule } from '../user-module/user.module';
+import { UserDetailsComponent } from './user/components/user-details/user-details.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { UserModule } from '../user-module/user.module';
     GroupMessageInputComponent,
     GroupMessagesContainer,
     UserComponent,
+    UserDetailsComponent,
     UserContainer,
     RootComponent,
     RootContainer

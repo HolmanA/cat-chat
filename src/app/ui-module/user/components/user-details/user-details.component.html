@@ -1,7 +1,6 @@
-<div (click)="userDetailsOpen = !userDetailsOpen">
+<div class="user-details">
     <img src="{{user?.image_url || 'https://i.groupme.com/549x549.jpeg.a00e1fbd97f24e0cba4a3dd53e789c33'}}" class="user-avatar img-circle" alt="Sender Avatar"/>
     <span class="user-name">
         {{user?.name}}
     </span>
 </div>
-<user-details-component *ngIf="userDetailsOpen" [user]="user" class="user-details"></user-details-component>
