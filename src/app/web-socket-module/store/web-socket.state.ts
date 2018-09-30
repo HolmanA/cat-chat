@@ -1,14 +1,18 @@
-import { Action, StateContext, State } from '@ngxs/store';
+import { Action, StateContext, State, Store } from '@ngxs/store';
 import * as WebSocketServiceActions from '../actions/web-socket.actions';
+import * as GroupChatsContainerActions from '../../ui-module/group-chats/actions/group-chats-container.actions';
+import { GroupChatsSelectors } from '../../group-chats-module/store/group-chats.selectors';
+import { MessageQueue } from './models/message-queue';
+import { UserSelectors } from '../../user-module/store/user.selectors';
 
 export interface WebSocketStateModel {
     isOpen: boolean;
-    messages: any[];
+    messageQueues: MessageQueue[];
 }
 
 const defaults: WebSocketStateModel = {
     isOpen: false,
-    messages: []
+    messageQueues: []
 };
 
 @State<WebSocketStateModel>({
@@ -17,6 +21,8 @@ const defaults: WebSocketStateModel = {
 })
 
 export class WebSocketState {
+    constructor(private store: Store) { }
+
     @Action(WebSocketServiceActions.ConnectionEstablished)
     connectionOpened({ patchState }: StateContext<WebSocketStateModel>) {
         patchState({
@@ -33,10 +39,44 @@ export class WebSocketState {
 
     @Action(WebSocketServiceActions.MessageReceived)
     messageReceived({ getState, patchState }: StateContext<WebSocketStateModel>, action: WebSocketServiceActions.MessageReceived) {
-        const messages = getState().messages;
-        messages.push(action.message);
-        patchState({
-            messages: messages
-        });
+        const userId = this.store.selectSnapshot(UserSelectors.getUserId);
+        // Ignore all messages from this user
+        if (userId === action.message.user_id) {
+            return;
+        }
+
+        const selectedChatId = this.store.selectSnapshot(GroupChatsSelectors.getSelectedChatId);
+        const messageChatId = action.message.group_id || action.message.chat_id;
+
+        // Only queue up message if chat is not open
+        if (messageChatId !== selectedChatId) {
+            const messageQueues = getState().messageQueues;
+            let messageQueue = messageQueues.find(queue => queue.chatId === messageChatId);
+
+            // Create and add a new message queue if one is not found
+            if (!messageQueue) {
+                messageQueue = {
+                    chatId: messageChatId,
+                    queue: []
+                } as MessageQueue;
+                messageQueues.push(messageQueue);
+            }
+            messageQueue.queue.push(action.message);
+            patchState({
+                messageQueues: [...messageQueues]
+            });
+        }
+    }
+
+    @Action(GroupChatsContainerActions.GroupChatSelected)
+    clearMessageQueue({ getState, patchState }: StateContext<WebSocketStateModel>, action: GroupChatsContainerActions.GroupChatSelected) {
+        const messageQueues = getState().messageQueues;
+        const selectedQueueIndex = messageQueues.findIndex(queue => queue.chatId === action.groupChat.group_id);
+        if (selectedQueueIndex >= 0) {
+            messageQueues.splice(selectedQueueIndex, 1);
+            patchState({
+                messageQueues: [...messageQueues]
+            });
+        }
     }
 }

@@ -24,6 +24,15 @@ export class GroupChatsSelectors {
     }
 
     /**
+     * Returns the currently selected group chat's ID
+     * @param state @see GroupChatsStateModel
+     */
+    @Selector([GroupChatsState])
+    static getSelectedChatId(state: GroupChatsStateModel) {
+        return state.selectedGroupChat.chat.id;
+    }
+
+    /**
 	 * Returns the currently selected group chat's messages
 	 * @param state @see GroupChatsStateModel
 	 */
