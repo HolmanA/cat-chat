@@ -16,6 +16,11 @@ export class GroupChatsListComponent implements AfterViewInit {
         this.initializeScroll();
     }
 
+    trimMessage(message: string): string {
+        const maxLength = 100;
+        return message.length > maxLength ? message.substring(0, maxLength).trim() + '...' : message;
+    }
+
     private initializeScroll(): void {
         this.scrollView.nativeElement.addEventListener('scroll', () => {
             const nativeElement = this.scrollView.nativeElement;
@@ -24,13 +29,5 @@ export class GroupChatsListComponent implements AfterViewInit {
                 // this.scrolledToTop.emit();
             }
         });
-    }
-
-    public trimMessage(message: string): string {
-        if (message.length > 50) {
-            return message.substring(0,49).trim() + '...';
-        } else {
-            return message
-        }
     }
 }
