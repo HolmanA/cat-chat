@@ -10,5 +10,8 @@
 				{{groupChat.messages.preview.nickname}}: {{trimMessage(groupChat.messages.preview.text)}}
 			</div>
 		</div>
+		<div *ngIf="newMessageCount(groupChat.id) > 0" class="new-message-counter">
+			{{newMessageCount(groupChat.id)}}
+		</div>
 	</div>
 </div>

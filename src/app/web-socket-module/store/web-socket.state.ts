@@ -1,6 +1,7 @@
 import { Action, StateContext, State, Store } from '@ngxs/store';
 import * as WebSocketServiceActions from '../actions/web-socket.actions';
 import * as GroupChatsContainerActions from '../../ui-module/group-chats/actions/group-chats-container.actions';
+import * as GroupChatsStateActions from '../../group-chats-module/actions/group-chats.actions';
 import { GroupChatsSelectors } from '../../group-chats-module/store/group-chats.selectors';
 import { MessageQueue } from './models/message-queue';
 import { UserSelectors } from '../../user-module/store/user.selectors';
@@ -41,9 +42,9 @@ export class WebSocketState {
     messageReceived({ getState, patchState }: StateContext<WebSocketStateModel>, action: WebSocketServiceActions.MessageReceived) {
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
         // Ignore all messages from this user
-        if (userId === action.message.user_id) {
-            return;
-        }
+        // if (userId === action.message.user_id) {
+        //     return;
+        // }
 
         const selectedChatId = this.store.selectSnapshot(GroupChatsSelectors.getSelectedChatId);
         const messageChatId = action.message.group_id || action.message.chat_id;
@@ -68,10 +69,10 @@ export class WebSocketState {
         }
     }
 
-    @Action(GroupChatsContainerActions.GroupChatSelected)
-    clearMessageQueue({ getState, patchState }: StateContext<WebSocketStateModel>, action: GroupChatsContainerActions.GroupChatSelected) {
+    @Action(GroupChatsStateActions.FetchGroupChatSucceeded)
+    clearMessageQueue({ getState, patchState }: StateContext<WebSocketStateModel>, action: GroupChatsStateActions.FetchGroupChatSucceeded) {
         const messageQueues = getState().messageQueues;
-        const selectedQueueIndex = messageQueues.findIndex(queue => queue.chatId === action.groupChat.group_id);
+        const selectedQueueIndex = messageQueues.findIndex(queue => queue.chatId === action.chatId);
         if (selectedQueueIndex >= 0) {
             messageQueues.splice(selectedQueueIndex, 1);
             patchState({
