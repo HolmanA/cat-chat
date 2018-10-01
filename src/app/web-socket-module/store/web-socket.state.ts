@@ -1,6 +1,5 @@
 import { Action, StateContext, State, Store } from '@ngxs/store';
 import * as WebSocketServiceActions from '../actions/web-socket.actions';
-import * as GroupChatsContainerActions from '../../ui-module/group-chats/actions/group-chats-container.actions';
 import * as GroupChatsStateActions from '../../group-chats-module/actions/group-chats.actions';
 import { GroupChatsSelectors } from '../../group-chats-module/store/group-chats.selectors';
 import { MessageQueue } from './models/message-queue';
@@ -42,9 +41,9 @@ export class WebSocketState {
     messageReceived({ getState, patchState }: StateContext<WebSocketStateModel>, action: WebSocketServiceActions.MessageReceived) {
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
         // Ignore all messages from this user
-        // if (userId === action.message.user_id) {
-        //     return;
-        // }
+        if (userId === action.message.user_id) {
+            return;
+        }
 
         const selectedChatId = this.store.selectSnapshot(GroupChatsSelectors.getSelectedChatId);
         const messageChatId = action.message.group_id || action.message.chat_id;
