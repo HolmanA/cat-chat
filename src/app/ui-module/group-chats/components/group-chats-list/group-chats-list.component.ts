@@ -22,10 +22,8 @@ export class GroupChatsListComponent implements AfterViewInit {
         return message.length > maxLength ? message.substring(0, maxLength).trim() + '...' : message;
     }
 
-    newMessageCount(chatId: string): number {
+    getNewMessageCount(chatId: string): number {
         const messageQueue = this.messageQueues.find(queue => queue.chatId === chatId);
-        console.log('message sizes', this.messageQueues);
-        console.log('message queue', messageQueue);
         return messageQueue ? messageQueue.queue.length : 0;
     }
 
