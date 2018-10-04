@@ -73,7 +73,7 @@ export class GroupChatsState {
                         messages: [messages]
                     }
                 });
-                asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatSucceeded()));
+                asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatSucceeded(groupChat.group_id)));
             }),
             catchError(error => {
                 return of(asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatFailed(error))));
@@ -125,7 +125,7 @@ export class GroupChatsState {
                         messages: [messages]
                     }
                 });
-                asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatSucceeded()));
+                asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatSucceeded(selectedChat.chat.id)));
             }),
             catchError(error => {
                 return of(asapScheduler.schedule(() => dispatch(new GroupChatsStateActions.FetchGroupChatFailed(error))));

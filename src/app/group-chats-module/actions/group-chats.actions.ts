@@ -22,6 +22,11 @@ export class FetchGroupChatsFailed {
  */
 export class FetchGroupChatSucceeded {
     static readonly type = '[group chats state] fetch group chat succeeded';
+    /**
+	 * @constructor
+	 * @param chatId the ID of the fetched chat
+	 */
+    constructor(public chatId: any) { }
 }
 
 /**
