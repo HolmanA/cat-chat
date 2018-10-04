@@ -11,6 +11,10 @@ import { GroupMessageInputComponent } from './group-messages/components/group-me
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GroupMessagesListItemComponent } from './group-messages/components/group-messages-list-item/group-messages-list-item.component';
 import { GroupMessagesListItemContainer } from './group-messages/container/group-messages-list-item.container';
+import { UserComponent } from './user/components/user/user.component';
+import { UserContainer } from './user/container/user.container';
+import { UserModule } from '../user-module/user.module';
+import { UserDetailsComponent } from './user/components/user-details/user-details.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +25,9 @@ import { GroupMessagesListItemContainer } from './group-messages/container/group
     GroupMessagesListItemContainer,
     GroupMessageInputComponent,
     GroupMessagesContainer,
+    UserComponent,
+    UserDetailsComponent,
+    UserContainer,
     RootComponent,
     RootContainer
   ],
@@ -28,7 +35,8 @@ import { GroupMessagesListItemContainer } from './group-messages/container/group
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    GroupChatsModule
+    GroupChatsModule,
+    UserModule
   ],
   exports: [
     RootContainer

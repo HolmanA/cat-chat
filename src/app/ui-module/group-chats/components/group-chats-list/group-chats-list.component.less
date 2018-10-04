@@ -1,3 +1,5 @@
+@import '../../../../../less/variables.less';
+
 :host {
     height: 100%;
     display: flex;
@@ -8,7 +10,7 @@
     font-size: 1em;
     font-weight: normal;
     opacity: 0.4;
-    padding: 5px 0px;
+    padding: @margin-tiny @margin-none;
 }
 
 .chats-container {
@@ -16,8 +18,8 @@
 
     .chat {
         display: flex;
-        margin: 10px 0px;
-        padding: 10px;
+        margin: @margin-xsmall @margin-none;
+        padding: @margin-xsmall;
         justify-content: space-between;
 
         &:hover {
@@ -26,7 +28,7 @@
 
         .preview {
             flex-grow: 1;
-            margin-left: 15px;
+            margin-left: @margin-small;
 
             .name {
                 font-size: .9em;
