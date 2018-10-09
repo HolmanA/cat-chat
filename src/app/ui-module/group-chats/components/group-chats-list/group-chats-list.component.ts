@@ -8,7 +8,7 @@ import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, AfterVie
 export class GroupChatsListComponent implements AfterViewInit {
     @ViewChild('scrollView') private scrollView: ElementRef;
     @Input() groupChatsList: any[];
-    @Input() selectedGroupChat: any;
+    @Input() selectedChats: any[];
     @Input() messageQueues: any[];
 
     @Output() groupChatSelected: EventEmitter<string> = new EventEmitter<string>();
@@ -25,6 +25,10 @@ export class GroupChatsListComponent implements AfterViewInit {
     getNewMessageCount(chatId: string): number {
         const messageQueue = this.messageQueues.find(queue => queue.chatId === chatId);
         return messageQueue ? messageQueue.queue.length : 0;
+    }
+
+    isSelected(chatId: string): boolean {
+        return this.selectedChats.find(chat => chat.chat.id === chatId) !== undefined;
     }
 
     private initializeScroll(): void {

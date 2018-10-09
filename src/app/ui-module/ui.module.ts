@@ -15,6 +15,7 @@ import { UserComponent } from './user/components/user/user.component';
 import { UserContainer } from './user/container/user.container';
 import { UserModule } from '../user-module/user.module';
 import { UserDetailsComponent } from './user/components/user-details/user-details.component';
+import { SelectedChatsModule } from '../selected-chats-module/selected-chats.module';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { UserDetailsComponent } from './user/components/user-details/user-detail
     FormsModule,
     ReactiveFormsModule,
     GroupChatsModule,
+    SelectedChatsModule,
     UserModule
   ],
   exports: [

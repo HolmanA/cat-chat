@@ -1,4 +1,4 @@
-<group-messages-list-component [userId]="userId$ | async" [selectedGroupChat]="selectedGroupChatDetails$ | async" [messagePageList]="selectedGroupChatMessages$ | async" (scrolledToTop)="scrolledToTop()">
+<group-messages-list-component [chatId]="chatId" [userId]="userId$ | async" [selectedGroupChat]="chatDetails$ | async" [messagePageList]="chatMessages$ | async" (scrolledToTop)="scrolledToTop()">
 </group-messages-list-component>
-<group-message-input-component *ngIf="selectedGroupChatDetails$ | async" (sendMessage)="sendMessage($event)">
+<group-message-input-component *ngIf="chatDetails$ | async" (sendMessage)="sendMessage($event)">
 </group-message-input-component>

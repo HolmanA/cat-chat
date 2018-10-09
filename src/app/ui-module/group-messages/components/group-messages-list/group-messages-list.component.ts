@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, Input, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'group-messages-list-component',
@@ -7,10 +7,11 @@ import { Component, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEm
 })
 export class GroupMessagesListComponent implements AfterViewInit {
     @Input() userId: string;
+    @Input() chatId: string;
+    @Input() selectedGroupChat: any;
     @Output() scrolledToTop: EventEmitter<any> = new EventEmitter<any>();
 
     private _messagePageList: any[];
-    private _selectedGroupChat: any;
 
     constructor(private elementRef: ElementRef) { }
 
@@ -21,11 +22,10 @@ export class GroupMessagesListComponent implements AfterViewInit {
     @Input()
     set messagePageList(list: any[]) {
         this._messagePageList = list;
-        const message = document.getElementById('message-0-0');
+        const message = document.getElementById(`chat-${this.chatId}-page-0-message-0`);
+
         if (message) {
-            window.requestAnimationFrame(() => {
-                message.scrollIntoView(true);
-            });
+            window.requestAnimationFrame(() => message.scrollIntoView(true));
         }
     }
 
@@ -33,24 +33,14 @@ export class GroupMessagesListComponent implements AfterViewInit {
         return this._messagePageList;
     }
 
-    @Input()
-    set selectedGroupChat(chat: any) {
-        this._selectedGroupChat = chat;
-        this.scrollToBottom();
-    }
-
-    get selectedGroupChat(): any {
-        return this._selectedGroupChat;
-    }
-
     private initializeScroll(): void {
         this.elementRef.nativeElement.addEventListener('scroll', () => {
-            const nativeElement = this.elementRef.nativeElement;
-
-            if (nativeElement.scrollTop === 0) {
+            if (this.elementRef.nativeElement.scrollTop === 0) {
                 this.scrolledToTop.emit();
             }
         });
+
+        this.scrollToBottom();
     }
 
     private scrollToBottom(): void {

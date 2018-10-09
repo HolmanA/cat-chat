@@ -1,9 +1,11 @@
 import { Action, StateContext, State, Store } from '@ngxs/store';
 import * as WebSocketServiceActions from '../actions/web-socket.actions';
 import * as GroupChatsStateActions from '../../group-chats-module/actions/group-chats.actions';
+import * as SelectedChatsStateActions from '../../selected-chats-module/actions/selected-chats.actions';
 import { GroupChatsSelectors } from '../../group-chats-module/store/group-chats.selectors';
 import { MessageQueue } from './models/message-queue';
 import { UserSelectors } from '../../user-module/store/user.selectors';
+import { SelectedChatsSelectors } from '../../selected-chats-module/store/selected-chats.selectors';
 
 export interface WebSocketStateModel {
     isOpen: boolean;
@@ -45,11 +47,13 @@ export class WebSocketState {
             return;
         }
 
-        const selectedChatId = this.store.selectSnapshot(GroupChatsSelectors.getSelectedChatId);
         const messageChatId = action.message.group_id || action.message.chat_id;
 
+        const chats = this.store.selectSnapshot(SelectedChatsSelectors.getSelectedChats);
+        const chatOpen = chats.find(chat => chat.chat.id === messageChatId);
+
         // Only queue up message if chat is not open
-        if (messageChatId !== selectedChatId) {
+        if (!chatOpen) {
             const messageQueues = getState().messageQueues;
             let messageQueue = messageQueues.find(queue => queue.chatId === messageChatId);
 
@@ -68,8 +72,8 @@ export class WebSocketState {
         }
     }
 
-    @Action(GroupChatsStateActions.FetchGroupChatSucceeded)
-    clearMessageQueue({ getState, patchState }: StateContext<WebSocketStateModel>, action: GroupChatsStateActions.FetchGroupChatSucceeded) {
+    @Action(SelectedChatsStateActions.FetchGroupChatSucceeded)
+    clearMessageQueue({ getState, patchState }: StateContext<WebSocketStateModel>, action: SelectedChatsStateActions.FetchGroupChatSucceeded) {
         const messageQueues = getState().messageQueues;
         const selectedQueueIndex = messageQueues.findIndex(queue => queue.chatId === action.chatId);
         if (selectedQueueIndex >= 0) {

@@ -11,6 +11,7 @@ import { UserSelectors } from '../../../user-module/store/user.selectors';
 export class GroupMessagesListItemContainer implements OnInit {
     @Select(UserSelectors.getUserId) userId$: Observable<string>;
     @Input() message: any;
+    @Input() chatId: string;
 
     userId: string;
 
@@ -22,9 +23,9 @@ export class GroupMessagesListItemContainer implements OnInit {
 
     likeMessage() {
         if (this.message.favorited_by.includes(this.userId)) {
-            this.store.dispatch(new Actions.UnlikeMessage(this.message.id));
+            this.store.dispatch(new Actions.UnlikeMessage(this.chatId, this.message.id));
         } else {
-            this.store.dispatch(new Actions.LikeMessage(this.message.id));
+            this.store.dispatch(new Actions.LikeMessage(this.chatId, this.message.id));
         }
     }
 }

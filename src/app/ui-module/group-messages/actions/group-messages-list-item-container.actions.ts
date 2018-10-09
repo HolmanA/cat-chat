@@ -3,7 +3,7 @@
  */
 export class LikeMessage {
     static readonly type = '[group messages list item container] like message';
-    constructor(public messageId: string) { }
+    constructor(public chatId: string, public messageId: string) { }
 }
 
 /**
@@ -11,5 +11,5 @@ export class LikeMessage {
  */
 export class UnlikeMessage {
     static readonly type = '[group messages list item container] unlike message';
-    constructor(public messageId: string) { }
+    constructor(public chatId: string, public messageId: string) { }
 }
