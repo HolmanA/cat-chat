@@ -7,6 +7,7 @@ import { Component, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEm
 })
 export class GroupMessagesListItemComponent {
     @Input() userId: string;
+    @Input() members: string[];
     @Input() message: any;
     @Output() likeMessage: EventEmitter<any> = new EventEmitter<any>();
 }

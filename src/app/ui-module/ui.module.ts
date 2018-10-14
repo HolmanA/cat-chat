@@ -16,6 +16,7 @@ import { UserContainer } from './user/container/user.container';
 import { UserModule } from '../user-module/user.module';
 import { UserDetailsComponent } from './user/components/user-details/user-details.component';
 import { SelectedChatsModule } from '../selected-chats-module/selected-chats.module';
+import { MessageTextComponent } from './group-messages/components/message-text/message-text.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { SelectedChatsModule } from '../selected-chats-module/selected-chats.mod
     GroupMessagesListItemContainer,
     GroupMessageInputComponent,
     GroupMessagesContainer,
+    MessageTextComponent,
     UserComponent,
     UserDetailsComponent,
     UserContainer,
