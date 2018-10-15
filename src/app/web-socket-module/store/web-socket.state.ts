@@ -43,8 +43,9 @@ export class WebSocketState {
     @Action(WebSocketServiceActions.MessageReceived)
     messageReceived({ getState, patchState }: StateContext<WebSocketStateModel>, action: WebSocketServiceActions.MessageReceived) {
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
-        // Ignore all messages from this user; Prevents messages sent from another device by this user as registering as new messages
-        // Disabled in dev environment; Use this feature to add messages to simulate new incoming messages
+        // Ignore all messages from this user; Messages sent by this user are still received over the websocket, this prevents those
+        //  messages from being registered
+        // Disabled in dev environment; Allows simulation of incoming messages by sending messages from another device
         if (environment.production && userId === action.message.user_id) {
             return;
         }
