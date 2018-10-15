@@ -9,6 +9,7 @@ import { AuthService } from './services/auth/auth.service';
 import { AuthInterceptor } from './services/auth/auth.interceptor';
 import { WebSocketModule } from '../web-socket-module/web-socket.module';
 import { UserModule } from '../user-module/user.module';
+import { environment } from '../../environments/environment';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,11 @@ import { UserModule } from '../user-module/user.module';
   imports: [
     BrowserModule,
     NgxsModule.forRoot(),
-    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsReduxDevtoolsPluginModule.forRoot({
+      name: 'Cat Chat',
+      disabled: environment.production,
+      maxAge: 50
+    }),
     WebSocketModule,
     UserModule,
     UIModule

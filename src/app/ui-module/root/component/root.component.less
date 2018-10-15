@@ -9,7 +9,7 @@
     font-family: 'Segoe UI';
 
     .side-menu-container {
-        flex-basis: 22%;
+        flex-basis: 20%;
         flex-shrink: 0;
         display: flex;
         flex-direction: column;
@@ -37,11 +37,17 @@
         display: flex;
         flex-grow: 1;
 
-        .messages-container {
-            display: flex;
+        .chat-wrapper {
+            flex-basis: 0;
             flex-grow: 1;
-            flex-direction: column;
-            justify-content: flex-end;
+
+            .messages-container {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+            }
         }
     }
 }

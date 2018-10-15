@@ -7,7 +7,9 @@
         </div>
     </div>
     <div class="body-container">
-        <group-messages-container class="messages-container"></group-messages-container>
-            <!-- <direct-messages-container></direct-messages-container> -->
+        <div *ngFor="let chat of selectedChats" class="chat-wrapper">
+            <group-messages-container *ngIf="chat.type === 'GROUP'" class="messages-container" [chatId]="chat.chat.id"></group-messages-container>
+            <!-- <direct-messages-container *ngIf="chat.type === 'DIRECT'" class="messages-container" [chatId]="chat.chat.id"></direct-messages-container> -->
+        </div>
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'root-component',
@@ -6,4 +6,5 @@ import { Component } from '@angular/core';
     styleUrls: ['./root.component.less']
 })
 export class RootComponent {
+    @Input() selectedChats: any[];
 }

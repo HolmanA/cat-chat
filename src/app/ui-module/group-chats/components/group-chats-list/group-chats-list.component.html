@@ -1,6 +1,6 @@
 <div class="list-title">Groups</div>
 <div class="chats-container" #scrollView>
-	<div *ngFor="let groupChat of groupChatsList" class="chat" [ngClass]="{'selected': groupChat.id === selectedGroupChat?.id}" (click)="groupChatSelected.emit(groupChat)">
+	<div *ngFor="let groupChat of groupChatsList" class="chat" [ngClass]="{'selected': isSelected(groupChat.id)}" (click)="groupChatSelected.emit(groupChat)">
         <div class="avatar">
             <img src="{{groupChat.image_url || 'https://i.groupme.com/549x549.jpeg.a00e1fbd97f24e0cba4a3dd53e789c33'}}" class="img-circle" alt="Sender Avatar" width="65px" height="65px"/>
         </div>
