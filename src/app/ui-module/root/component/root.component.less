@@ -1,29 +1,53 @@
+@import '../../../../less/variables.less';
+
 .root-container {
     display: flex;
     min-height: 100vh;
     max-height: 100vh;
-    background-color: #111520;
-    color: #ffffff;
+    background-color: @deep-blue;
+    color: white;
     font-family: 'Segoe UI';
 
-    .chats-container {
-        padding: 20px;
-        flex-basis: 22%;
+    .side-menu-container {
+        flex-basis: 20%;
+        flex-shrink: 0;
         display: flex;
         flex-direction: column;
-        border-right: 2px #222B43 solid;
+        border-right: @border-thin @border-blue solid;
 
-        .chats-list-container {
-            max-height: 50%;
+        .user-container {
+            padding: @margin-medium;
+            border-bottom: @border-thin @border-blue solid;
+        }
+
+        .chats-container {
+            padding: @margin-medium;
             display: flex;
             flex-direction: column;
+
+            .chats-list-container {
+                max-height: 50%;
+                display: flex;
+                flex-direction: column;
+            }
         }
     }
 
-    .messages-container {
-        flex-basis: 78%;
+    .body-container {
         display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
+        flex-grow: 1;
+
+        .chat-wrapper {
+            flex-basis: 0;
+            flex-grow: 1;
+
+            .messages-container {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+            }
+        }
     }
 }

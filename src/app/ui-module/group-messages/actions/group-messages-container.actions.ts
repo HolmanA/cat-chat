@@ -3,6 +3,11 @@
  */
 export class Initialized {
     static readonly type = '[group messages container] initialized';
+    /**
+	 * @constructor
+     * @param chatId this chat's ID
+	 */
+    constructor(public chatId: string) { }
 }
 
 /**
@@ -12,9 +17,10 @@ export class SendMessage {
     static readonly type = '[group messages container] send message';
     /**
 	 * @constructor
+     * @param chatId this chat's ID
 	 * @param content the message content
 	 */
-    constructor(public content: any) { }
+    constructor(public chatId: string, public content: any) { }
 }
 
 /**
@@ -22,4 +28,9 @@ export class SendMessage {
  */
 export class ScrolledToTop {
     static readonly type = '[group messages container] scrolled to top';
+    /**
+	 * @constructor
+     * @param chatId this chat's ID
+	 */
+    constructor(public chatId: string) { }
 }

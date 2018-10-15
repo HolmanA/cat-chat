@@ -5,7 +5,7 @@
             {{message.name}}
         </div>
         <div class="message-text">
-            {{message.text}}
+            <message-text-component [rawMessage]="message.text" [members]="members"></message-text-component>
         </div>
         <div class="message-created-at">
             {{message.created_at*1000 | date: 'short'}}

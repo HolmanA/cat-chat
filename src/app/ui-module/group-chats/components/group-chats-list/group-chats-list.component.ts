@@ -8,12 +8,27 @@ import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, AfterVie
 export class GroupChatsListComponent implements AfterViewInit {
     @ViewChild('scrollView') private scrollView: ElementRef;
     @Input() groupChatsList: any[];
-    @Input() selectedGroupChat: any;
+    @Input() selectedChats: any[];
+    @Input() messageQueues: any[];
 
     @Output() groupChatSelected: EventEmitter<string> = new EventEmitter<string>();
 
     ngAfterViewInit(): void {
         this.initializeScroll();
+    }
+
+    trimMessage(message: string): string {
+        const maxLength = 100;
+        return message.length > maxLength ? message.substring(0, maxLength).trim() + '...' : message;
+    }
+
+    getNewMessageCount(chatId: string): number {
+        const messageQueue = this.messageQueues.find(queue => queue.chatId === chatId);
+        return messageQueue ? messageQueue.queue.length : 0;
+    }
+
+    isSelected(chatId: string): boolean {
+        return this.selectedChats.find(chat => chat.chat.id === chatId) !== undefined;
     }
 
     private initializeScroll(): void {
@@ -24,13 +39,5 @@ export class GroupChatsListComponent implements AfterViewInit {
                 // this.scrolledToTop.emit();
             }
         });
-    }
-
-    public trimMessage(message: string): string {
-        if (message.length > 50) {
-            return message.substring(0,49).trim() + '...';
-        } else {
-            return message
-        }
     }
 }
