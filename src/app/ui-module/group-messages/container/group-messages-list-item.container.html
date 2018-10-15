@@ -1,1 +1,1 @@
-<group-messages-list-item-component class="message" [ngClass]="{'sent': userId === message.sender_id}" [message]="message" [userId]="userId$ | async" (likeMessage)="likeMessage()"></group-messages-list-item-component> 
+<group-messages-list-item-component class="message" [ngClass]="{'sent': userId === message.sender_id}" [message]="message" [userId]="userId$ | async" [members]="chatMembers$ | async" (likeMessage)="likeMessage()"></group-messages-list-item-component> 

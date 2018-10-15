@@ -56,6 +56,29 @@ export class SelectedChatsSelectors {
     }
 
     /**
+     * Returns an array of members for the specified chat id
+     * @param chatId the chat id
+     */
+    static getSelectedChatMembers(chatId: string) {
+        return createSelector([SelectedChatsState], (state: SelectedChatsStateModel) => {
+            const chat = state.selectedChats.find(c => c.chat.id === chatId);
+            return chat && chat.chat && chat.chat.members;
+        });
+    }
+
+    /**
+     * Returns an array of member nicknames for the specified chat id
+     * @param chatId the chat id
+     */
+    static getSelectedChatMemberNicknames(chatId: string) {
+        return createSelector([SelectedChatsState], (state: SelectedChatsStateModel) => {
+            const chat = state.selectedChats.find(c => c.chat.id === chatId);
+            const members = chat && chat.chat && chat.chat.members || [];
+            return members.map(member => member.nickname);
+        });
+    }
+
+    /**
      * Returns the new message queue for the specified chat id
      * @param state @see WebSocketStateModel
      */
