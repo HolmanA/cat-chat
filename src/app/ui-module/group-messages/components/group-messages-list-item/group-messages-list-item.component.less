@@ -36,6 +36,11 @@
 
     .like-box {
         padding: 10px 5px 0px 15px;
+        white-space: nowrap;
+ 
+        &.like-box-hidden {
+            visibility: hidden;
+        }
 
         .dot {
             height: 25px;
@@ -63,6 +68,13 @@
         .like-counter {
             font-size: 1em;
             font-weight: 600;
+            position: relative;
+            top: 20px;
+
+            &.like-counter-hidden {
+                visibility: hidden;
+            }
+
         }
     }
 }

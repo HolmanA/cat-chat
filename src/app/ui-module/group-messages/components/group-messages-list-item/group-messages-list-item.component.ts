@@ -9,4 +9,5 @@ export class GroupMessagesListItemComponent {
     @Input() userId: string;
     @Input() message: any;
     @Output() likeMessage: EventEmitter<any> = new EventEmitter<any>();
+    isHover: boolean = false;
 }
