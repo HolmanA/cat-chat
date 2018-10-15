@@ -6,6 +6,7 @@ import { GroupChatsSelectors } from '../../group-chats-module/store/group-chats.
 import { MessageQueue } from './models/message-queue';
 import { UserSelectors } from '../../user-module/store/user.selectors';
 import { SelectedChatsSelectors } from '../../selected-chats-module/store/selected-chats.selectors';
+import { environment } from 'src/environments/environment';
 
 export interface WebSocketStateModel {
     isOpen: boolean;
@@ -42,8 +43,10 @@ export class WebSocketState {
     @Action(WebSocketServiceActions.MessageReceived)
     messageReceived({ getState, patchState }: StateContext<WebSocketStateModel>, action: WebSocketServiceActions.MessageReceived) {
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
-        // Ignore all messages from this user
-        if (userId === action.message.user_id) {
+        // Ignore all messages from this user; Messages sent by this user are still received over the websocket, this prevents those
+        //  messages from being registered
+        // Disabled in dev environment; Allows simulation of incoming messages by sending messages from another device
+        if (environment.production && userId === action.message.user_id) {
             return;
         }
 

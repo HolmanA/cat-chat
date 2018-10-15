@@ -7,6 +7,10 @@
         <div class="message-text">
             <message-text-component [rawMessage]="message.text" [members]="members"></message-text-component>
         </div>
+        <div *ngFor="let attachment of message.attachments" class="attachment">
+            <img *ngIf="attachment.type === 'image'" [src]="attachment.url" [alt]="attachment.url"/>
+            <video *ngIf="attachment.type === 'video'" [src]="attachment.url" [poster]="attachment.preview_url" controls></video>
+        </div>
         <div class="message-created-at">
             {{message.created_at*1000 | date: 'short'}}
         </div>
