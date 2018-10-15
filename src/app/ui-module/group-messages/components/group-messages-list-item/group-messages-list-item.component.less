@@ -38,7 +38,12 @@
 
     .like-box {
         padding: @margin-xsmall @margin-tiny @margin-none @margin-small;
-
+        white-space: nowrap;
+ 
+        &.like-box-hidden {
+            visibility: hidden;
+        }
+      
         .like-icon {
 
             &:hover {
@@ -49,6 +54,13 @@
         .like-counter {
             font-size: 1em;
             font-weight: 600;
+            position: relative;
+            top: 20px;
+
+            &.like-counter-hidden {
+                visibility: hidden;
+            }
+
         }
     }
 }
