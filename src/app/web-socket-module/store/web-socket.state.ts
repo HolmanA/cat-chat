@@ -7,6 +7,7 @@ import { MessageQueue } from './models/message-queue';
 import { UserSelectors } from '../../user-module/store/user.selectors';
 import { SelectedChatsSelectors } from '../../selected-chats-module/store/selected-chats.selectors';
 import { environment } from 'src/environments/environment';
+import { asapScheduler, of, Observable, throwError } from 'rxjs';
 
 export interface WebSocketStateModel {
     isOpen: boolean;
@@ -41,7 +42,7 @@ export class WebSocketState {
     }
 
     @Action(WebSocketServiceActions.MessageReceived)
-    messageReceived({ getState, patchState }: StateContext<WebSocketStateModel>, action: WebSocketServiceActions.MessageReceived) {
+    messageReceived({ getState, patchState, dispatch }: StateContext<WebSocketStateModel>, action: WebSocketServiceActions.MessageReceived) {
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
         // Ignore all messages from this user; Messages sent by this user are still received over the websocket, this prevents those
         //  messages from being registered
@@ -72,6 +73,8 @@ export class WebSocketState {
             patchState({
                 messageQueues: [...messageQueues]
             });
+        } else {
+            asapScheduler.schedule(() => dispatch(new WebSocketServiceActions.MessageRecievedOpenChat(messageChatId)));
         }
     }
 
