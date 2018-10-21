@@ -7,11 +7,13 @@ elif [ "$1" = "stage" ]; then
     git fetch
     git checkout stage
     git merge master
+    git push
 elif [ "$2" = "production" ]; then
     echo "Deploying stage to production"
     git fetch
     git checkout production
     git merge stage
+    git push
 else
     echo "Unknow deploy command"
 fi
