@@ -11,6 +11,10 @@ addons:
       - google-chrome
     packages:
       - google-chrome-stable
+  git:
+    depth: false
+    quiet: true
+    
  
 cache:
   directories:
