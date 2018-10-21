@@ -75,6 +75,9 @@
             },
             "production": {
               "browserTarget": "cat-chat:build:production"
+            },
+            "ci": {
+              "progress": false
             }
           }
         },
@@ -131,6 +134,10 @@
             },
             "production": {
               "devServerTarget": "cat-chat:serve:production"
+            },
+            "ci": {
+              "protractorConfig": "e2e/protractor-ci.conf.js",
+              "devServerTarget": "cat-chat:serve:ci"
             }
           }
         },

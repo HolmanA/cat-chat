@@ -1,11 +1,16 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { LikeMessageHttpService } from './like-message.service';
-
+import { HttpClient } from '@angular/common/http';
 
 describe('LikeMessageHttpService', () => {
+  const httpClient = jasmine.createSpyObj('HttpClient', ['post']);
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LikeMessageHttpService]
+      providers: [
+        LikeMessageHttpService,
+        { provide: HttpClient, useValue: httpClient }
+      ]
     });
   });
 
