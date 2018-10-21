@@ -10,5 +10,5 @@ export class GroupMessagesListItemComponent {
     @Input() members: string[];
     @Input() message: any;
     @Output() likeMessage: EventEmitter<any> = new EventEmitter<any>();
-    isHover: boolean = false;
+    isHover = false;
 }

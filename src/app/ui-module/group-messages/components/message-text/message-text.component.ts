@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, Inject, Renderer } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, Inject, Renderer, Renderer2 } from '@angular/core';
 import { Token, TokenList } from './tokens/token';
 import { MentionToken } from './tokens/mention-token';
 
@@ -11,7 +11,7 @@ export class MessageTextComponent implements AfterViewInit {
     private tokenList = [...TokenList.TOKENS];
     private _members: string[];
     private _messageText: string;
-    constructor(private elementRef: ElementRef, private renderer: Renderer) { }
+    constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
 
     @Input()
     set members(members: string[]) {
@@ -34,6 +34,6 @@ export class MessageTextComponent implements AfterViewInit {
         for (const token of this.tokenList) {
             this._messageText = this._messageText.replace(token.regex, (match) => token.replaceFn(match));
         }
-        this.renderer.setElementProperty(this.elementRef.nativeElement, 'innerHTML', this._messageText);
+        this.renderer.setProperty(this.elementRef.nativeElement, 'innerHTML', this._messageText);
     }
 }
