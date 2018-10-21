@@ -23,3 +23,9 @@ script:
   - ng lint
   - npm run test -- --watch=false --no-progress --browsers=ChromeHeadlessCI
   - npm run e2e -- --configuration=ci
+
+deploy:
+  provider: script
+  script: bash scripts/deploy.sh stage
+  on:
+    branch: master
