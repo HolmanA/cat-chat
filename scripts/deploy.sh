@@ -7,13 +7,13 @@ elif [ "$1" = "stage" ]; then
     git fetch
     git checkout stage
     git merge master
-    git push
+    git push -q https://${GH_TOKEN}@github.com/HolmanA/cat-chat.git/ stage
 elif [ "$2" = "production" ]; then
     echo "Deploying stage to production"
     git fetch
     git checkout production
     git merge stage
-    git push
+    git push -q https://${GH_TOKEN}@github.com/HolmanA/cat-chat.git/ production
 else
     echo "Unknow deploy command"
 fi
