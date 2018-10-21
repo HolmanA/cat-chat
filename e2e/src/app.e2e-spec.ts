@@ -7,8 +7,8 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should be initialized', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to cat-chat!');
+    expect(page.getAppRoot().isPresent()).toBe(true);
   });
 });
