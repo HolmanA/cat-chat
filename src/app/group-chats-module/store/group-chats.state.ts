@@ -9,6 +9,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { asapScheduler, of, Observable } from 'rxjs';
 import { GroupChatsHttpService } from '../services/group-chats.service';
 import { FetchGroupsRequest } from '../services/models/groups/fetch-groups.request';
+import * as WebSocketServiceActions from '../../web-socket-module/actions/web-socket.actions';
 
 export interface GroupChatsStateModel {
     groupChats: any[];
@@ -26,7 +27,7 @@ const defaults: GroupChatsStateModel = {
 export class GroupChatsState {
     constructor(private groupChatsService: GroupChatsHttpService) { }
 
-    @Action([GroupChatsContainerActions.Initialized, SelectedChatsStateActions.CreateMessageSucceeded])
+    @Action([GroupChatsContainerActions.Initialized, SelectedChatsStateActions.CreateMessageSucceeded, WebSocketServiceActions.MessageReceived])
     fetchGroups({ patchState, dispatch }: StateContext<GroupChatsStateModel>) {
         const request = new FetchGroupsRequest();
 

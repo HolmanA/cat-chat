@@ -29,6 +29,15 @@ export class MessageReceived {
     constructor(public message: any) { }
 }
 
+export class MessageRecievedOpenChat {
+    static readonly type = '[group chats state] message recieved in open chat';
+    /**
+	 * @constructor
+	 * @param chatId the chat ID
+	 */
+    constructor(public chatId: any) { }
+}
+
 /**
  * Action alerting that a connection error has occured
  */
