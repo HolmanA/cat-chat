@@ -4,6 +4,7 @@ import * as SelectedChatsStateActions from '../actions/selected-chats.actions';
 import * as GroupMessagesContainerActions from '../../ui-module/group-messages/actions/group-messages-container.actions';
 import * as GroupMessagesListItemContainerActions from '../../ui-module/group-messages/actions/group-messages-list-item-container.actions';
 import * as GroupChatsContainerActions from '../../ui-module/group-chats/actions/group-chats-container.actions';
+import * as WebSocketServiceActions from '../../web-socket-module/actions/web-socket.actions';
 import { SelectedChat } from './models/selected-chat';
 import { FetchMessagesRequest } from '../../group-chats-module/services/models/messages/fetch-messages.request';
 import { GroupChatsHttpService } from '../../group-chats-module/services/group-chats.service';
@@ -124,7 +125,8 @@ export class SelectedChatsState {
     @Action([
         SelectedChatsStateActions.CreateMessageSucceeded,
         SelectedChatsStateActions.LikeMessageSucceeded,
-        SelectedChatsStateActions.UnlikeMessageSucceeded])
+        SelectedChatsStateActions.UnlikeMessageSucceeded,
+        WebSocketServiceActions.MessageRecievedOpenChat])
     refreshMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: SelectedChatsStateActions.CreateMessageSucceeded | SelectedChatsStateActions.LikeMessageSucceeded | SelectedChatsStateActions.UnlikeMessageSucceeded) {
         const selectedChats = getState().selectedChats;
         const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
