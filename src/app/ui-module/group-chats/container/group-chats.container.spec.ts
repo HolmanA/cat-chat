@@ -2,7 +2,7 @@ import { GroupChatsContainer } from './group-chats.container';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store } from '@ngxs/store';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { NgxsTestUtilities } from 'src/util/NgxsTestUtilities';
+import { NgxsTestUtilities } from 'src/util/test/NgxsTestUtilities';
 import { of } from 'rxjs';
 import * as GroupChatsContainerActions from '../actions/group-chats-container.actions';
 
