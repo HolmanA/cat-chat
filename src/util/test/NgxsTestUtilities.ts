@@ -14,7 +14,7 @@ export class NgxsTestUtilities {
         return;
     }
 
-    static mockDecoratedSelectors(component: any, mockSelectors: MockDecoratedSelectors[]) {
+    static mockDecoratedSelectors(component: any, mockSelectors: MockDecoratedSelector[]) {
         for (let i = 0; i < mockSelectors.length; i++) {
             const selector = mockSelectors[i];
             Object.defineProperty(component, selector.variableName, { writable: true });
@@ -35,7 +35,7 @@ class MockSelector {
     useValue: any;
 }
 
-class MockDecoratedSelectors {
+class MockDecoratedSelector {
     variableName: string;
     useValue: Observable<any>;
 }
