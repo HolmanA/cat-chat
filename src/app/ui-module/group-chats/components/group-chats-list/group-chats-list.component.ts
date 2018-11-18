@@ -11,7 +11,7 @@ export class GroupChatsListComponent implements AfterViewInit {
     @Input() selectedChats: any[];
     @Input() messageQueues: any[];
 
-    @Output() groupChatSelected: EventEmitter<string> = new EventEmitter<string>();
+    @Output() groupChatSelected: EventEmitter<any> = new EventEmitter<any>();
 
     ngAfterViewInit(): void {
         this.initializeScroll();

@@ -21,7 +21,7 @@ export class GroupChatsContainer implements OnInit {
         this.store.dispatch(new Actions.Initialized());
     }
 
-    groupChatSelected(groupChat: string) {
+    groupChatSelected(groupChat: any) {
         this.store.dispatch(new Actions.GroupChatSelected(groupChat));
     }
 }
