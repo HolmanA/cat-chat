@@ -80,6 +80,7 @@
               "browserTarget": "cat-chat:build:production"
             },
             "ci": {
+              "browserTarget": "cat-chat:build:production",
               "progress": false
             }
           }
