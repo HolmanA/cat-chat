@@ -102,6 +102,30 @@ export class LoadMoreMessagesFailed {
 }
 
 /**
+ * Action alerting that a request to fetch newer messages succeeded
+ */
+export class FetchNewerMessagesSucceeded {
+    static readonly type = '[group chats state] fetch newer messages succeeded';
+    /**
+	 * @constructor
+	 * @param chatId the chat ID
+	 */
+    constructor(public chatId: any) { }
+}
+
+/**
+ * Action alerting that a request to fetch newer messages failed
+ */
+export class FetchNewerMessagesFailed {
+    static readonly type = '[group chats state] fetch newer messages failed';
+    /**
+	 * @constructor
+	 * @param message the failure message
+	 */
+    constructor(public message: any) { }
+}
+
+/**
  * Action alerting that a request to like a message succeeded
  */
 export class LikeMessageSucceeded {

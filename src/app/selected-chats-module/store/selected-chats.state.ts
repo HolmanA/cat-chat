@@ -123,11 +123,10 @@ export class SelectedChatsState {
     }
 
     @Action([
-        SelectedChatsStateActions.CreateMessageSucceeded,
-        SelectedChatsStateActions.LikeMessageSucceeded,
-        SelectedChatsStateActions.UnlikeMessageSucceeded,
-        WebSocketServiceActions.MessageRecievedOpenChat])
-    refreshMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: SelectedChatsStateActions.CreateMessageSucceeded | SelectedChatsStateActions.LikeMessageSucceeded | SelectedChatsStateActions.UnlikeMessageSucceeded) {
+        // SelectedChatsStateActions.LikeMessageSucceeded,
+        // SelectedChatsStateActions.UnlikeMessageSucceeded
+    ])
+    refreshMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: SelectedChatsStateActions.LikeMessageSucceeded | SelectedChatsStateActions.UnlikeMessageSucceeded) {
         const selectedChats = getState().selectedChats;
         const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
 
@@ -150,6 +149,43 @@ export class SelectedChatsState {
             }),
             catchError(error => {
                 return of(asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchGroupChatFailed(error))));
+            })
+        );
+    }
+
+    @Action([
+        SelectedChatsStateActions.CreateMessageSucceeded,
+        WebSocketServiceActions.MessageRecievedOpenChat
+    ])
+    fetchNewerMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: WebSocketServiceActions.MessageRecievedOpenChat | SelectedChatsStateActions.CreateMessageSucceeded) {
+        const selectedChats = getState().selectedChats;
+        const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
+
+        if (chatIndex < 0) {
+            // TODO: Create custom alert/ log
+            return;
+        }
+
+        const selectedChat = selectedChats[chatIndex];
+        const newestPage = selectedChat.messages[selectedChat.messages.length - 1];
+        const newestMessageId = newestPage[newestPage.length - 1].id;
+
+        const request: FetchMessagesRequest = new FetchMessagesRequest();
+        request.group_id = selectedChat.chat.id;
+        request.after_id = newestMessageId;
+
+        return this.groupChatsService.fetchMessages(request).pipe(
+            tap(messages => {
+                selectedChats[chatIndex].messages = [...selectedChat.messages, messages];
+
+                patchState({
+                    selectedChats: selectedChats
+                });
+
+                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchNewerMessagesSucceeded(action.chatId)));
+            }),
+            catchError(error => {
+                return of(asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchNewerMessagesFailed(error))));
             })
         );
     }
