@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ElementRef, AfterViewInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
 @Component({
     selector: 'group-messages-list-component',
@@ -11,9 +11,16 @@ export class GroupMessagesListComponent implements AfterViewInit {
     @Input() selectedGroupChat: any;
     @Output() scrolledToTop: EventEmitter<any> = new EventEmitter<any>();
 
-    private _messagePageList: any[];
+    public newMessages = false;
+    public scrolledToBottom = true;
 
-    constructor(private elementRef: ElementRef) { }
+    private _messagePageList: any[];
+    private _scrolledToTop = false;
+
+    constructor(
+        private elementRef: ElementRef,
+        private changeDetectorRef: ChangeDetectorRef
+        ) { }
 
     ngAfterViewInit(): void {
         this.initializeScroll();
@@ -22,10 +29,19 @@ export class GroupMessagesListComponent implements AfterViewInit {
     @Input()
     set messagePageList(list: any[]) {
         this._messagePageList = list;
-        const message = document.getElementById(`chat-${this.chatId}-page-0-message-0`);
 
-        if (message) {
-            window.requestAnimationFrame(() => message.scrollIntoView(true));
+        if (this.scrolledToBottom) {
+            this.changeDetectorRef.detectChanges();
+            this.scrollToBottom();
+        } else if (this._scrolledToTop) {
+            const message = document.getElementById(`chat-${this.chatId}-page-0-message-0`);
+
+            // Scroll to previous top message when more messages are loaded
+            if (message) {
+                window.requestAnimationFrame(() => message.scrollIntoView(true));
+            }
+        } else {
+            this.newMessages = true;
         }
     }
 
@@ -33,21 +49,31 @@ export class GroupMessagesListComponent implements AfterViewInit {
         return this._messagePageList;
     }
 
+    public scrollToBottom(): void {
+        try {
+            this.elementRef.nativeElement.scrollTop = this.elementRef.nativeElement.scrollHeight;
+            this.newMessages = false;
+        } catch (error) {
+            console.error('scroll error', error);
+        }
+    }
+
     private initializeScroll(): void {
-        this.elementRef.nativeElement.addEventListener('scroll', () => {
-            if (this.elementRef.nativeElement.scrollTop === 0) {
+        const nativeElement = this.elementRef.nativeElement;
+        nativeElement.addEventListener('scroll', () => {
+            const scrollTop = Math.floor(nativeElement.scrollTop);
+            const maxScrollTop = nativeElement.scrollHeight - nativeElement.offsetHeight;
+
+            this.scrolledToBottom = scrollTop === maxScrollTop;
+            this._scrolledToTop = scrollTop === 0;
+
+            if (this._scrolledToTop) {
                 this.scrolledToTop.emit();
+            } else if (this.scrolledToBottom) {
+                this.newMessages = false;
             }
         });
 
         this.scrollToBottom();
-    }
-
-    private scrollToBottom(): void {
-        try {
-            this.elementRef.nativeElement.scrollTop = this.elementRef.nativeElement.scrollHeight;
-        } catch (error) {
-            console.error('scroll error', error);
-        }
     }
 }

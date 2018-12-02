@@ -35,6 +35,8 @@
                   "with": "src/environments/environment.dev.ts"
                 }
               ],
+              "progress": true,
+              "verbose": true,
               "optimization": false,
               "outputHashing": "all",
               "sourceMap": true,
@@ -43,6 +45,7 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
+              "watch": true,
               "buildOptimizer": true
             },
             "production": {
@@ -67,7 +70,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "cat-chat:build"
+            "browserTarget": "cat-chat:build:dev"
           },
           "configurations": {
             "dev": {
