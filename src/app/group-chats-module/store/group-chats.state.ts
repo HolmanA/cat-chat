@@ -1,15 +1,12 @@
-import { v4 as uuid } from 'uuid';
 import { Action, StateContext, State } from '@ngxs/store';
 import * as GroupChatsStateActions from '../actions/group-chats.actions';
 import * as GroupChatsContainerActions from '../../ui-module/group-chats/actions/group-chats-container.actions';
 import * as SelectedChatsStateActions from '../../selected-chats-module/actions/selected-chats.actions';
-import * as GroupMessagesContainerActions from '../../ui-module/group-messages/actions/group-messages-container.actions';
-import * as GroupMessagesListItemContainerActions from '../../ui-module/group-messages/actions/group-messages-list-item-container.actions';
 import { catchError, tap } from 'rxjs/operators';
-import { asapScheduler, of, Observable } from 'rxjs';
+import { asapScheduler, of } from 'rxjs';
 import { GroupChatsHttpService } from '../services/group-chats.service';
 import { FetchGroupsRequest } from '../services/models/groups/fetch-groups.request';
-import * as WebSocketServiceActions from '../../web-socket-module/actions/web-socket.actions';
+import * as MessageQueueStateActions from '../../message-queue-module/actions/message-queue.actions';
 
 export interface GroupChatsStateModel {
     groupChats: any[];
@@ -27,7 +24,7 @@ const defaults: GroupChatsStateModel = {
 export class GroupChatsState {
     constructor(private groupChatsService: GroupChatsHttpService) { }
 
-    @Action([GroupChatsContainerActions.Initialized, SelectedChatsStateActions.CreateMessageSucceeded, WebSocketServiceActions.MessageReceived])
+    @Action([GroupChatsContainerActions.Initialized, SelectedChatsStateActions.CreateMessageSucceeded, MessageQueueStateActions.MessageReceived])
     fetchGroups({ patchState, dispatch }: StateContext<GroupChatsStateModel>) {
         const request = new FetchGroupsRequest();
 

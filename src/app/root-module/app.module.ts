@@ -7,9 +7,10 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { UIModule } from '../ui-module/ui.module';
 import { AuthService } from './services/auth/auth.service';
 import { AuthInterceptor } from './services/auth/auth.interceptor';
-import { WebSocketModule } from '../web-socket-module/web-socket.module';
 import { UserModule } from '../user-module/user.module';
 import { environment } from '../../environments/environment';
+import { WebSocketManagerService } from './services/web-socket/web-socket-manager.service';
+import { MessageQueueModule } from '../message-queue-module/message-queue.module';
 
 @NgModule({
   declarations: [
@@ -23,12 +24,13 @@ import { environment } from '../../environments/environment';
       disabled: environment.production,
       maxAge: 50
     }),
-    WebSocketModule,
     UserModule,
+    MessageQueueModule,
     UIModule
   ],
   providers: [
     AuthService,
+    WebSocketManagerService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

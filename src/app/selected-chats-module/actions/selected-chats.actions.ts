@@ -2,7 +2,7 @@
  * Action alerting that a request to fetch group chats succeeded
  */
 export class FetchGroupChatsSucceeded {
-    static readonly type = '[group chats state] fetch group chats succeeded';
+    static readonly type = '[selected chats state] fetch group chats succeeded';
 }
 
 /**
@@ -21,7 +21,7 @@ export class ChatClosed {
  * Action alerting that a request to fetch group chats failed
  */
 export class FetchGroupChatsFailed {
-    static readonly type = '[group chats state] fetch group chats failed';
+    static readonly type = '[selected chats state] fetch group chats failed';
     /**
 	 * @constructor
 	 * @param message the failure message
@@ -33,7 +33,7 @@ export class FetchGroupChatsFailed {
  * Action alerting that a request to fetch a group chat succeeded
  */
 export class FetchGroupChatSucceeded {
-    static readonly type = '[group chats state] fetch group chat succeeded';
+    static readonly type = '[selected chats state] fetch group chat succeeded';
     /**
 	 * @constructor
 	 * @param chatId the ID of the fetched chat
@@ -45,7 +45,7 @@ export class FetchGroupChatSucceeded {
  * Action alerting that a request to fetch a group chat failed
  */
 export class FetchGroupChatFailed {
-    static readonly type = '[group chats state] fetch group chat failed';
+    static readonly type = '[selected chats state] fetch group chat failed';
     /**
 	 * @constructor
 	 * @param message the failure message
@@ -57,7 +57,7 @@ export class FetchGroupChatFailed {
  * Action alerting that a request to create a message succeeded
  */
 export class CreateMessageSucceeded {
-    static readonly type = '[group chats state] create message succeeded';
+    static readonly type = '[selected chats state] create message succeeded';
     /**
 	 * @constructor
 	 * @param chatId the chat ID
@@ -69,7 +69,7 @@ export class CreateMessageSucceeded {
  * Action alerting that a request to create a message failed
  */
 export class CreateMessageFailed {
-    static readonly type = '[group chats state] create message failed';
+    static readonly type = '[selected chats state] create message failed';
     /**
 	 * @constructor
 	 * @param message the failure message
@@ -81,7 +81,7 @@ export class CreateMessageFailed {
  * Action alerting that a request to load more messages succeeded
  */
 export class LoadMoreMessagesSucceeded {
-    static readonly type = '[group chats state] load more messages succeeded';
+    static readonly type = '[selected chats state] load more messages succeeded';
     /**
 	 * @constructor
 	 * @param chatId the chat ID
@@ -93,7 +93,7 @@ export class LoadMoreMessagesSucceeded {
  * Action alerting that a request to load more messages failed
  */
 export class LoadMoreMessagesFailed {
-    static readonly type = '[group chats state] load more messages failed';
+    static readonly type = '[selected chats state] load more messages failed';
     /**
 	 * @constructor
 	 * @param message the failure message
@@ -105,7 +105,7 @@ export class LoadMoreMessagesFailed {
  * Action alerting that a request to fetch newer messages succeeded
  */
 export class FetchNewerMessagesSucceeded {
-    static readonly type = '[group chats state] fetch newer messages succeeded';
+    static readonly type = '[selected chats state] fetch newer messages succeeded';
     /**
 	 * @constructor
 	 * @param chatId the chat ID
@@ -117,7 +117,7 @@ export class FetchNewerMessagesSucceeded {
  * Action alerting that a request to fetch newer messages failed
  */
 export class FetchNewerMessagesFailed {
-    static readonly type = '[group chats state] fetch newer messages failed';
+    static readonly type = '[selected chats state] fetch newer messages failed';
     /**
 	 * @constructor
 	 * @param message the failure message
@@ -129,7 +129,7 @@ export class FetchNewerMessagesFailed {
  * Action alerting that a request to like a message succeeded
  */
 export class LikeMessageSucceeded {
-    static readonly type = '[group chats state] like message succeeded';
+    static readonly type = '[selected chats state] like message succeeded';
     /**
 	 * @constructor
 	 * @param chatId the chat ID
@@ -141,7 +141,7 @@ export class LikeMessageSucceeded {
  * Action alerting that a request to like a message failed
  */
 export class LikeMessageFailed {
-    static readonly type = '[group chats state] like message failed';
+    static readonly type = '[selected chats state] like message failed';
     /**
 	 * @constructor
 	 * @param message the failure message
@@ -153,22 +153,87 @@ export class LikeMessageFailed {
  * Action alerting that a request to unlike a message succeeded
  */
 export class UnlikeMessageSucceeded {
-    static readonly type = '[group chats state] unlike message succeeded';
+    static readonly type = '[selected chats state] unlike message succeeded';
     /**
 	 * @constructor
 	 * @param chatId the chat ID
+	 * @param messageId the message ID
 	 */
-    constructor(public chatId: any) { }
+    constructor(public chatId: string, public messageId: string) { }
 }
 
 /**
  * Action alerting that a request to unlike a message failed
  */
 export class UnlikeMessageFailed {
-    static readonly type = '[group chats state] unlike message failed';
+    static readonly type = '[selected chats state] unlike message failed';
     /**
 	 * @constructor
 	 * @param message the failure message
 	 */
     constructor(public message: any) { }
+}
+
+/**
+ * Action alerting that the websocket connection has been established
+ */
+export class ChatChannelConnectionEstablished {
+    static readonly type = '[selected chats state] chat channel connection established';
+    /**
+	 * @constructor
+	 * @param chatId the chat ID
+	 */
+    constructor(public chatId: string) { }
+}
+
+/**
+ * Action alerting that the websocket connection has been closed
+ */
+export class ChatChannelConnectionClosed {
+    static readonly type = '[selected chats state] chat channel connection closed';
+    /**
+	 * @constructor
+	 * @param chatId the chat ID
+	 * @param message the failure message
+	 */
+    constructor(public chatId: string, public message?: any) { }
+}
+
+/**
+ * Action alerting that an incoming message has been received
+ */
+export class ChatChannelMessageReceived {
+    static readonly type = '[selected chats state] chat channel message received';
+    /**
+	 * @constructor
+	 * @param chatId the chat ID
+	 * @param message the incoming message
+	 */
+    constructor(public chatId: string, public message: any) { }
+}
+
+/**
+ * Action alerting that a connection error has occured
+ */
+export class ChatChannelConnectionError {
+    static readonly type = '[selected chats state] chat channel connection error';
+    /**
+	 * @constructor
+	 * @param chatId the chat ID
+	 * @param error the error message
+	 */
+    constructor(public chatId: string, public error?: any) { }
+}
+
+/**
+ * Action alerting that an incoming message has been received
+ */
+export class ChatChannelLikeReceived {
+    static readonly type = '[selected chats state] chat channel like received';
+    /**
+	 * @constructor
+	 * @param chatId the chat ID
+	 * @param message the incoming message
+	 */
+    constructor(public chatId: string, public message: any) { }
 }
