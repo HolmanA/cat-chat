@@ -1,51 +1,50 @@
-import { Injectable } from '@angular/core';
-import { AuthService } from '../../root-module/services/auth/auth.service';
-import { Store, Select } from '@ngxs/store';
-import * as Actions from '../actions/web-socket.actions';
-import { UserSelectors } from '../../user-module/store/user.selectors';
-import { Observable } from 'rxjs';
+import { WebSocketConfiguration } from './models/web-socket-configuration';
 
 /**
  * Service used to connect to GroupMe's push-message websocket
  * Runs on its own and interacts with other components through selectors and actions
  */
-@Injectable()
-export class WebSocketService {
-    @Select(UserSelectors.getUserId) userId$: Observable<string>;
-    private websocket: WebSocket;
-    private userId: string;
+export class BaseWebSocket {
+    private readonly TIMEOUT_MILLIS = 120000; // 2 min
+    private timeout;
+    private webSocket: WebSocket;
+    private messageId = 1;
 
     constructor(
-        private store: Store,
-        private authService: AuthService
+        private config: WebSocketConfiguration,
+        private authToken: string
     ) {
-        // Reconnect to the websocket service if the user id is changed
-        this.userId$.subscribe(id => {
-            this.userId = id;
-            this.restart();
-        });
+        this.connect();
     }
 
-    /**
-     * Re-initiate the connection
-     */
-    private restart(): void {
-        this.websocket = new WebSocket('wss://push.groupme.com/faye');
+    public connect() {
+        if (!this.config.subscriptionPath) {
+            console.error('Subscription path required for a web-socket connection.');
+            return;
+        }
+
+        this.webSocket = new WebSocket('wss://push.groupme.com/faye');
 
         // Send handshake once connection is establlished
-        this.websocket.onopen = () => {
+        this.webSocket.onopen = () => {
             if (this.isConnected()) {
                 this.sendHandshake();
             }
         };
 
-        this.websocket.onclose = (message) => {
-            this.store.dispatch(new Actions.ConnectionClosed(message));
-        };
+        this.webSocket.onclose = this.config.connClosedFn;
+        this.webSocket.onerror = this.config.connErrorFn;
+    }
 
-        this.websocket.onerror = (error) => {
-            this.store.dispatch(new Actions.ConnectionError(error));
-        };
+    public close() {
+        this.webSocket.close();
+    }
+
+    /**
+     * Checks if the connections status is OPEN
+     */
+    public isConnected(): boolean {
+        return this.webSocket.readyState === this.webSocket.OPEN;
     }
 
     /**
@@ -53,14 +52,7 @@ export class WebSocketService {
      * @param message JSON object message
      */
     private send(message: any): void {
-        this.websocket.send(JSON.stringify(message));
-    }
-
-    /**
-     * Checks if the connections status is OPEN
-     */
-    private isConnected(): boolean {
-        return this.websocket.readyState === this.websocket.OPEN;
+        this.webSocket.send(JSON.stringify(message));
     }
 
     /**
@@ -68,12 +60,12 @@ export class WebSocketService {
      * Sets @see sendHandshakeResponseHandler as the websocket message handler function
      */
     private sendHandshake(): void {
-        this.websocket.onmessage = (message) => this.sendHandshakeResponseHandler(message);
+        this.webSocket.onmessage = (message) => this.sendHandshakeResponseHandler(message);
         this.send([{
             channel: '/meta/handshake',
             version: 1.0,
             supportedConnectionTypes: ['websocket'],
-            id: 1
+            id: this.messageId
         }]);
     }
 
@@ -83,7 +75,8 @@ export class WebSocketService {
      */
     private sendHandshakeResponseHandler(message: MessageEvent): void {
         const data = JSON.parse(message.data)[0];
-        if (data.id === 1 && data.successful) {
+        if (data.id === this.messageId && data.successful) {
+            this.messageId++;
             // Successfully executed handshake, subscribe to new message channel
             const clientId = data.clientId;
             this.sendSubscribe(clientId);
@@ -96,14 +89,14 @@ export class WebSocketService {
      * @param clientId The client id received in response to this connection's handshake message
      */
     private sendSubscribe(clientId: string): void {
-        this.websocket.onmessage = (message) => this.sendSubscribeResponseHandler(message);
+        this.webSocket.onmessage = (message) => this.sendSubscribeResponseHandler(message);
         this.send([{
             channel: '/meta/subscribe',
             clientId: clientId,
-            subscription: `/user/${this.userId}`,
-            id: 2,
+            subscription: this.config.subscriptionPath,
+            id: this.messageId,
             ext: {
-                access_token: this.authService.authToken,
+                access_token: this.authToken,
                 timestamp: Date.now()
             }
         }]);
@@ -114,11 +107,14 @@ export class WebSocketService {
      * @param message The response message to @see sendSubscribe
      */
     private sendSubscribeResponseHandler(message: MessageEvent): void {
+        this.refreshTimeout();
+
         const data = JSON.parse(message.data)[0];
-        if (data.id === 2 && data.successful) {
+        if (data.id === this.messageId && data.successful) {
+            this.messageId++;
             // Successfully connected to groupme websocket, set message handler to default
-            this.websocket.onmessage = (messageEvent) => this.messageHandler(messageEvent);
-            this.store.dispatch(new Actions.ConnectionEstablished());
+            this.webSocket.onmessage = (messageEvent) => this.messageHandler(messageEvent);
+            this.config.connEsteblishedFn();
         }
     }
 
@@ -127,11 +123,21 @@ export class WebSocketService {
      * @param message Incoming message
      */
     private messageHandler(messageEvent: MessageEvent): void {
+        this.refreshTimeout();
+
         const data = JSON.parse(messageEvent.data)[0].data;
         if (data.type === 'ping') {
             return;
-        } else if (data.subject) {
-            this.store.dispatch(new Actions.MessageReceived(data.subject));
+        } else if (data) {
+            this.config.messageHandlerFn(data);
         }
+    }
+
+    private refreshTimeout() {
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+            this.close();
+            this.connect();
+        }, this.TIMEOUT_MILLIS);
     }
 }

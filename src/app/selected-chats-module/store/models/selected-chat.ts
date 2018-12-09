@@ -5,4 +5,5 @@ export class SelectedChat {
     type: ChatType;
     messages: any[];
     newMessage: any;
+    socketConnectionOpen: boolean;
 }

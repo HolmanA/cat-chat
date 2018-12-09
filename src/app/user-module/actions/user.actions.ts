@@ -3,6 +3,11 @@
  */
 export class FetchUserSucceeded {
     static readonly type = '[user state] fetch user succeeded';
+    /**
+	 * @constructor
+	 * @param user the user
+	 */
+    constructor(public user: any) { }
 }
 
 /**

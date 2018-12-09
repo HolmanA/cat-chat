@@ -1,6 +1,6 @@
 import { Action, StateContext, State } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
-import { asapScheduler, of, Observable } from 'rxjs';
+import { asapScheduler, of } from 'rxjs';
 import { UserHttpService } from '../services/user.service';
 import * as AppComponentActions from '../../root-module/actions/app.actions';
 import * as UserStateActions from '../actions/user.actions';
@@ -28,7 +28,7 @@ export class UserState {
                 patchState({
                     user: user
                 });
-                asapScheduler.schedule(() => dispatch(new UserStateActions.FetchUserSucceeded()));
+                asapScheduler.schedule(() => dispatch(new UserStateActions.FetchUserSucceeded(user)));
             }),
             catchError(error => {
                 return of(asapScheduler.schedule(() => dispatch(new UserStateActions.FetchUserFailed(error))));
