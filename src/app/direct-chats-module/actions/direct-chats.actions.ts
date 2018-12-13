@@ -16,4 +16,3 @@ export class FetchDirectChatsFailed {
 	 */
     constructor(public message: any) { }
 }
-

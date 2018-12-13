@@ -42,9 +42,3 @@ export class DirectChatsListComponent implements AfterViewInit {
     }
 
 }
-
-
-
-
-
-
