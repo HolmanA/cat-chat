@@ -1,0 +1,24 @@
+<div class="message" [ngClass]="{'sent': userId === message.sender_id}" (mouseenter)="isHover = !isHover" (mouseleave)="isHover = !isHover">
+    <img src="{{message.avatar_url || 'https://i.groupme.com/549x549.jpeg.a00e1fbd97f24e0cba4a3dd53e789c33'}}" class="img-circle" alt="Sender Avatar" width="60px" height="60px"/>
+    <div class="message-info">
+        <div class="sender-name">
+            {{message.name}}
+        </div>
+        <div class="message-text">
+            <message-text-component [rawMessage]="message.text" [members]="members"></message-text-component>
+        </div>
+        <div *ngFor="let attachment of message.attachments" class="attachment">
+            <img *ngIf="attachment.type === 'image'" [src]="attachment.url" [alt]="attachment.url"/>
+            <video *ngIf="attachment.type === 'video'" [src]="attachment.url" [poster]="attachment.preview_url" controls></video>
+        </div>
+        <div class="message-created-at">
+            {{message.created_at*1000 | date: 'short'}}
+        </div>
+    </div>
+    <div class="like-box" [ngClass]="{'like-box-hidden': (message.favorited_by.length === 0) && !isHover}">
+        <img [src]="message.favorited_by?.includes(userId) ? 'assets/like-cat-active.png' : 'assets/like-cat.png'" class="like-icon" alt="Like Icon" height="40px" (click)="likeMessage.emit()"/>
+        <span class="like-counter" [ngClass]="{'like-counter-hidden': message.favorited_by.length === 0}">
+            {{message.favorited_by.length}}
+        </span>
+    </div>
+</div>

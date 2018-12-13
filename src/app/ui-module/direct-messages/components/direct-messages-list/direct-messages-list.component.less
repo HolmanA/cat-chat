@@ -1,0 +1,31 @@
+:host {
+    flex-basis: 100%;
+    overflow-y: auto;
+}
+
+.full-width-container {
+    display: flex;
+    justify-content: flex-end;
+    max-width: 100%;
+
+    .scroll-to-bottom-container {
+        position: absolute;
+        bottom: 100px;
+
+        .scroll-to-bottom {
+            color: black;
+            z-index: 3;
+            position: relative;
+            right: 15px;  
+            width: 50px;
+            height: 50px;
+            border: 0px;
+            border-radius: 50%;
+            background-color: lightslategray;
+
+            &.new-messages {
+                background-color: #F0AC37;
+            }
+        }
+    }
+}

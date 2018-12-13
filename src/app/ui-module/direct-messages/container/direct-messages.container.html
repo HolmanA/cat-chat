@@ -1,0 +1,4 @@
+<direct-messages-list-component [other_user_id]="other_user_id" [userId]="userId$ | async" [selectedDirectChat]="chatDetails$ | async" [messagePageList]="chatMessages$ | async" (scrolledToTop)="scrolledToTop()">
+</direct-messages-list-component>
+<direct-message-input-component *ngIf="chatDetails$ | async" (sendMessage)="sendMessage($event)">
+</direct-message-input-component>

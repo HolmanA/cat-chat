@@ -1,0 +1,6 @@
+<div class="message-input input-group input-group-lg">
+    <span class="input-group-btn">
+        <button class="btn send" (click)="send()" type="button">Send</button>
+    </span>
+    <input class="form-control input" (keydown.enter)=send() type="text" [(ngModel)]="model.text" placeholder="Write Message"/>
+</div>

@@ -17,6 +17,15 @@ import { UserModule } from '../user-module/user.module';
 import { UserDetailsComponent } from './user/components/user-details/user-details.component';
 import { SelectedChatsModule } from '../selected-chats-module/selected-chats.module';
 import { MessageTextComponent } from './group-messages/components/message-text/message-text.component';
+import { DirectChatsListComponent } from './direct-chats/components/direct-chats-list/direct-chats-list.component';
+import { DirectChatsContainer } from './direct-chats/container/direct-chats.container';
+import { DirectChatsModule } from '../direct-chats-module/direct-chats.module';
+import { DirectMessageInputComponent } from './direct-messages/components/direct-message-input/direct-message-input.component';
+import { DirectMessagesListComponent } from './direct-messages/components/direct-messages-list/direct-messages-list.component';
+import { DirectMessagesListItemComponent } from './direct-messages/components/direct-messages-list-item/direct-messages-list-item.component';
+import { DirectMessagesListItemContainer } from './direct-messages/container/direct-messages-list-item.container';
+import { DirectMessagesContainer } from './direct-messages/container/direct-messages.container';
+import { DirectMessageTextComponent } from './direct-messages/components/message-text/direct-message-text.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +36,15 @@ import { MessageTextComponent } from './group-messages/components/message-text/m
     GroupMessagesListItemContainer,
     GroupMessageInputComponent,
     GroupMessagesContainer,
+    DirectChatsListComponent,
+    DirectChatsContainer,
+    DirectMessageInputComponent,
+    DirectMessagesListComponent,
+    DirectMessagesListItemComponent,
+    DirectMessagesListItemContainer,
+    DirectMessagesContainer,
     MessageTextComponent,
+    DirectMessageTextComponent,
     UserComponent,
     UserDetailsComponent,
     UserContainer,
@@ -39,6 +56,7 @@ import { MessageTextComponent } from './group-messages/components/message-text/m
     FormsModule,
     ReactiveFormsModule,
     GroupChatsModule,
+    DirectChatsModule,
     SelectedChatsModule,
     UserModule
   ],

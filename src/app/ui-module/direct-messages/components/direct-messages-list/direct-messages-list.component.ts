@@ -1,14 +1,14 @@
 import { Component, Input, ElementRef, AfterViewInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
 @Component({
-    selector: 'group-messages-list-component',
-    templateUrl: './group-messages-list.component.html',
-    styleUrls: ['./group-messages-list.component.less']
+    selector: 'direct-messages-list-component',
+    templateUrl: './direct-messages-list.component.html',
+    styleUrls: ['./direct-messages-list.component.less']
 })
-export class GroupMessagesListComponent implements AfterViewInit {
+export class DirectMessagesListComponent implements AfterViewInit {
     @Input() userId: string;
-    @Input() chatId: string;
-    @Input() selectedGroupChat: any;
+    @Input() other_user_id: string;
+    @Input() selectedDirectChat: any;
     @Output() scrolledToTop: EventEmitter<any> = new EventEmitter<any>();
 
     public newMessages = false;
@@ -28,12 +28,12 @@ export class GroupMessagesListComponent implements AfterViewInit {
 
     @Input()
     set messagePageList(list: any[]) {
-        this._messagePageList = list;
+        this._messagePageList = Array(list[0].direct_messages);
         if (this.scrolledToBottom) {
             this.changeDetectorRef.detectChanges();
             this.scrollToBottom();
         } else if (this._scrolledToTop) {
-            const message = document.getElementById(`chat-${this.chatId}-page-0-message-0`);
+            const message = document.getElementById(`chat-${this.other_user_id}-page-0-message-0`);
 
             // Scroll to previous top message when more messages are loaded
             if (message) {

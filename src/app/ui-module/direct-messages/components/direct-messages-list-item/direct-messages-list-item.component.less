@@ -1,0 +1,76 @@
+@import '../../../../../less/variables.less';
+
+.message {
+    display: flex;
+    max-width: 100%;
+    padding: @margin-small @margin-medium @margin-small @margin-medium;
+    background-color: #171C2A;
+    justify-content: space-between;
+
+    &.sent {
+        background-color: transparent;
+    }
+
+
+    img {
+        object-fit: cover;
+    }
+
+    .message-info {
+        margin-left: @margin-small;
+        flex-grow: 1;
+
+        .sender-name {
+            font-size: .9em;
+            font-weight: 600;
+        }
+
+        .message-text {
+            font-size: 1em;
+            font-weight: normal;
+            opacity: 0.8;
+        }
+
+        .message-created-at {
+            font-size: .9em;
+            opacity: 0.4;
+        }
+
+        .attachment {
+            * {
+                border: 6px solid #1F2F43;
+                margin: @margin-tiny @margin-none;
+                max-width: 100%; 
+                max-height: 40vh;
+            }
+        }
+    }
+
+    .like-box {
+        padding: @margin-xsmall @margin-tiny @margin-none @margin-small;
+        white-space: nowrap;
+ 
+        &.like-box-hidden {
+            visibility: hidden;
+        }
+      
+        .like-icon {
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .like-counter {
+            font-size: 1em;
+            font-weight: 600;
+            position: relative;
+            top: 20px;
+
+            &.like-counter-hidden {
+                visibility: hidden;
+            }
+
+        }
+    }
+}
