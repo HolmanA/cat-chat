@@ -55,6 +55,17 @@ export class SelectedChatsSelectors {
         });
     }
 
+        /**
+     * Returns the new message queue for the specified chat id
+     * @param state @see WebSocketStateModel
+     */
+    static getSelectedDirectChatDetails(chatId: string) {
+        return createSelector([SelectedChatsState], (state: SelectedChatsStateModel) => {
+            const chat = state.selectedChats.find(c => c.chat.other_user.id === chatId);
+            return chat ? chat.chat : null;
+        });
+    }
+
     /**
      * Returns an array of members for the specified chat id
      * @param chatId the chat id
@@ -85,6 +96,17 @@ export class SelectedChatsSelectors {
     static getSelectedChatMessages(chatId: string) {
         return createSelector([SelectedChatsState], (state: SelectedChatsStateModel) => {
             const chat = state.selectedChats.find(c => c.chat.id === chatId);
+            return chat ? chat.messages : null;
+        });
+    }
+
+    /**
+     * Returns the new message queue for the specified chat id
+     * @param state @see WebSocketStateModel
+     */
+    static getSelectedChatDirectMessages(chatId: string) {
+        return createSelector([SelectedChatsState], (state: SelectedChatsStateModel) => {
+            const chat = state.selectedChats.find(c => c.chat.other_user.id === chatId);
             return chat ? chat.messages : null;
         });
     }

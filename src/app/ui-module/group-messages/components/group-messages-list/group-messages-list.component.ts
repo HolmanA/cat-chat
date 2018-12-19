@@ -28,6 +28,8 @@ export class GroupMessagesListComponent implements AfterViewInit {
 
     @Input()
     set messagePageList(list: any[]) {
+        console.log('group messages');
+        console.log(list);
         this._messagePageList = list;
         if (this.scrolledToBottom) {
             this.changeDetectorRef.detectChanges();

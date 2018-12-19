@@ -36,7 +36,7 @@ export class DirectChatsHttpService {
         );
     }
 
-   /**
+    /**
      * Creates a new message in a direct chat
      */
     createMessage(request: CreateDirectChatRequest): Observable<any> {

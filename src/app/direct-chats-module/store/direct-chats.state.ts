@@ -25,7 +25,7 @@ export class DirectChatsState {
     constructor(private directChatsService: DirectChatsHttpService) { }
 
     @Action([DirectChatsContainerActions.Initialized, SelectedChatsStateActions.CreateMessageSucceeded, MessageQueueStateActions.MessageReceived])
-    fetchGroups({ patchState, dispatch }: StateContext<DirectChatsStateModel>) {
+    fetchDirectChats({ patchState, dispatch }: StateContext<DirectChatsStateModel>) {
         const request = new FetchDirectChatsRequest();
         return this.directChatsService.fetchDirectChats(request).pipe(
             tap(directChats => {

@@ -28,7 +28,9 @@ export class DirectMessagesListComponent implements AfterViewInit {
 
     @Input()
     set messagePageList(list: any[]) {
-        this._messagePageList = Array(list[0].direct_messages);
+        console.log('direct messages');
+        console.log(list);
+        this._messagePageList = Array(list[0].direct_messages.reverse());
         if (this.scrolledToBottom) {
             this.changeDetectorRef.detectChanges();
             this.scrollToBottom();

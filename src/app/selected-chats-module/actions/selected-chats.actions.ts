@@ -6,6 +6,14 @@ export class FetchGroupChatsSucceeded {
 }
 
 /**
+ * Action alerting that a request to fetch direct chats succeeded
+ */
+export class FetchDirectChatsSucceeded {
+    static readonly type = '[selected chats state] fetch direct chats succeeded';
+}
+
+
+/**
  * Action alerting that a chat has been closed
  */
 export class ChatClosed {
@@ -30,6 +38,18 @@ export class FetchGroupChatsFailed {
 }
 
 /**
+ * Action alerting that a request to fetch direct chats failed
+ */
+export class FetchDirectChatsFailed {
+    static readonly type = '[selected chats state] fetch direct chats failed';
+    /**
+	 * @constructor
+	 * @param message the failure message
+	 */
+    constructor(public message: any) { }
+}
+
+/**
  * Action alerting that a request to fetch a group chat succeeded
  */
 export class FetchGroupChatSucceeded {
@@ -42,10 +62,34 @@ export class FetchGroupChatSucceeded {
 }
 
 /**
+ * Action alerting that a request to fetch a direct chat succeeded
+ */
+export class FetchDirectChatSucceeded {
+    static readonly type = '[selected chats state] fetch direct chat succeeded';
+    /**
+	 * @constructor
+	 * @param chatId the ID of the fetched chat
+	 */
+    constructor(public chatId: any) { }
+}
+
+/**
  * Action alerting that a request to fetch a group chat failed
  */
 export class FetchGroupChatFailed {
     static readonly type = '[selected chats state] fetch group chat failed';
+    /**
+	 * @constructor
+	 * @param message the failure message
+	 */
+    constructor(public message: any) { }
+}
+
+/**
+ * Action alerting that a request to fetch a group chat failed
+ */
+export class FetchDirectChatFailed {
+    static readonly type = '[selected chats state] fetch direct chat failed';
     /**
 	 * @constructor
 	 * @param message the failure message

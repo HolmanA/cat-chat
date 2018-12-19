@@ -2,7 +2,7 @@ import { Selector } from '@ngxs/store';
 import { DirectChatsStateModel, DirectChatsState } from './direct-chats.state';
 
 /**
- * Selector class for @see GroupChatsState
+ * Selector class for @see DirectChatsState
  */
 export class DirectChatsSelectors {
     /**
