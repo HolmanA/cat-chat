@@ -55,12 +55,10 @@ export class SelectedChatsState {
         const selectedChats = getState().selectedChats;
         // Close group chat if it is already open
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'GROUP') {
-                if (selectedChats[i].chat.id === groupChat.id) {
-                    this.socketManager.unsubscribeFromChannel(groupChat.id);
-                    asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.ChatClosed(i)));
-                    return;
-                }
+            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === groupChat.id) {
+                this.socketManager.unsubscribeFromChannel(groupChat.id);
+                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.ChatClosed(i)));
+                return;
             }
         }
 
@@ -109,14 +107,12 @@ export class SelectedChatsState {
     fetchDirect({ getState, patchState, dispatch }: StateContext<SelectedChatsStateModel>, { directChat }: DirectChatsContainerActions.DirectChatSelected) {
         const selectedChats = getState().selectedChats;
         const channelId = directChat.last_message.recipient_id + '_' + directChat.last_message.sender_id;
-        // Close group chat if it is already open
+        // Close direct chat if it is already open
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'DIRECT') {
-                if (selectedChats[i].chat.other_user.id === directChat.other_user.id) {
-                    this.socketManager.unsubscribeFromChannel(directChat.other_user.id);
-                    asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.ChatClosed(i)));
-                    return;
-                }
+            if (selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === directChat.other_user.id) {
+                this.socketManager.unsubscribeFromChannel(directChat.other_user.id);
+                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.ChatClosed(i)));
+                return;
             }
         }
 
@@ -146,13 +142,14 @@ export class SelectedChatsState {
                     selectedChats: selectedChats
                 });
                 this.socketManager.subscribeToChannel(new DirectChannelConfiguration(
+                    directChat.other_user.id,
                     channelId,
-                    () => dispatch(new SelectedChatsStateActions.ChatChannelConnectionEstablished(channelId)),
-                    (event: CloseEvent) => dispatch(new SelectedChatsStateActions.ChatChannelConnectionClosed(channelId, event)),
-                    (event: Event) => dispatch(new SelectedChatsStateActions.ChatChannelConnectionError(channelId, event)),
-                    (data: any) => dispatch(new SelectedChatsStateActions.ChatChannelMessageReceived(channelId, data))
+                    () => dispatch(new SelectedChatsStateActions.ChatChannelConnectionEstablished(directChat.other_user.id)),
+                    (event: CloseEvent) => dispatch(new SelectedChatsStateActions.ChatChannelConnectionClosed(directChat.other_user.id, event)),
+                    (event: Event) => dispatch(new SelectedChatsStateActions.ChatChannelConnectionError(directChat.other_user.id, event)),
+                    (data: any) => dispatch(new SelectedChatsStateActions.ChatChannelMessageReceived(directChat.other_user.id, data))
                 ));
-                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchDirectChatSucceeded(channelId)));
+                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchDirectChatSucceeded(directChat.other_user.id)));
             }),
             catchError(error => {
                 asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchDirectChatFailed(error)));
@@ -164,31 +161,28 @@ export class SelectedChatsState {
     @Action(SelectedChatsStateActions.ChatChannelConnectionEstablished)
     connectionOpened({ getState, patchState }: StateContext<SelectedChatsStateModel>, action: SelectedChatsStateActions.ChatChannelConnectionEstablished) {
         const selectedChats = getState().selectedChats;
-        console.log(selectedChats);
-        const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
-        if (chatIndex < 0) {
-            return;
+        for (let i = 0; i < selectedChats.length; i++) {
+            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId ||
+                selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+                const selectedChat = selectedChats[i];
+                selectedChat.socketConnectionOpen = true;
+                patchState({selectedChats: selectedChats});
+            }
         }
-        const selectedChat = selectedChats[chatIndex];
-        selectedChat.socketConnectionOpen = true;
-        patchState({
-            selectedChats: selectedChats
-        });
     }
 
     @Action(SelectedChatsStateActions.ChatChannelConnectionClosed)
     connectionClosed({ getState, patchState }: StateContext<SelectedChatsStateModel>, action: SelectedChatsStateActions.ChatChannelConnectionClosed) {
         const selectedChats = getState().selectedChats;
-
-        const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
-        if (chatIndex < 0) {
-            return;
+        // This section won't do anyting because selectedChats will always clear the selected chat beforehand...
+        for (let i = 0; i < selectedChats.length; i++) {
+            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId ||
+                selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+                const selectedChat = selectedChats[i];
+                selectedChat.socketConnectionOpen = false;
+                patchState({selectedChats: selectedChats});
+            }
         }
-        const selectedChat = selectedChats[chatIndex];
-        selectedChat.socketConnectionOpen = false;
-        patchState({
-            selectedChats: selectedChats
-        });
     }
 
     @Action(SelectedChatsStateActions.ChatClosed)
@@ -205,7 +199,13 @@ export class SelectedChatsState {
     @Action(GroupMessagesContainerActions.ScrolledToTop)
     loadMoreMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: GroupMessagesContainerActions.ScrolledToTop) {
         const selectedChats = getState().selectedChats;
-        const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
+        let chatIndex: any;
+        for (let i = 0; i < selectedChats.length; i++) {
+            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId ||
+                selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+                chatIndex = i;
+            }
+        }
 
         if (chatIndex < 0) {
             // TODO: Create custom alert/ log
@@ -221,7 +221,6 @@ export class SelectedChatsState {
         return this.groupChatsService.fetchMessages(request).pipe(
             tap(messages => {
                 selectedChats[chatIndex].messages = [messages, ...selectedChat.messages];
-
                 patchState({
                     selectedChats: selectedChats
                 });
@@ -237,7 +236,13 @@ export class SelectedChatsState {
     @Action(DirectMessagesContainerActions.ScrolledToTop)
     loadMoreDirectMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: DirectMessagesContainerActions.ScrolledToTop) {
         const selectedChats = getState().selectedChats;
-        const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
+        let chatIndex: any;
+        for (let i = 0; i < selectedChats.length; i++) {
+            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId ||
+                selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+                chatIndex = i;
+            }
+        }
 
         if (chatIndex < 0) {
             // TODO: Create custom alert/ log
@@ -245,19 +250,17 @@ export class SelectedChatsState {
         }
 
         const selectedChat = selectedChats[chatIndex];
-        const oldestMessageId = selectedChat.messages[0][0].id;
+        const oldestMessageId = selectedChat.messages[0].direct_messages[0].id;
         const request: FetchDirectChatRequest = new FetchDirectChatRequest();
-        request.other_user_id = selectedChat.chat.id;
+        request.other_user_id = selectedChat.chat.other_user.id;
         request.before_id = oldestMessageId;
 
         return this.directChatsService.fetchDirectChat(request).pipe(
             tap(messages => {
                 selectedChats[chatIndex].messages = [messages, ...selectedChat.messages];
-
                 patchState({
                     selectedChats: selectedChats
                 });
-
                 asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.LoadMoreMessagesSucceeded(action.chatId)));
             }),
             catchError(error => {

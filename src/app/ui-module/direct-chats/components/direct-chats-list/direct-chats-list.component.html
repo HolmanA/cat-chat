@@ -1,6 +1,6 @@
 <div class="list-title">Direct Chats</div>
 <div class="chats-container" #scrollView>
-	<div *ngFor="let directChat of directChatsList" class="chat" [ngClass]="{'selected': isSelected(directChat.id)}" (click)="directChatSelected.emit(directChat)">
+	<div *ngFor="let directChat of directChatsList" class="chat" [ngClass]="{'selected': isSelected(directChat.other_user.id)}" (click)="directChatSelected.emit(directChat)">
 		<div class="avatar">
             <img src="{{directChat.other_user.avatar_url || 'https://i.groupme.com/549x549.jpeg.a00e1fbd97f24e0cba4a3dd53e789c33'}}" class="img-circle" alt="Sender Avatar" width="65px" height="65px"/>
         </div>

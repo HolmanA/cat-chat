@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+    import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 @Component({
     selector: 'direct-chats-list-component',
@@ -28,7 +28,7 @@ export class DirectChatsListComponent implements AfterViewInit {
     }
 
     isSelected(chatId: string): boolean {
-        return this.selectedChats.find(chat => chat.chat.id === chatId) !== undefined;
+        return this.selectedChats.find(chat => chat.chat.other_user.id === chatId) !== undefined;
     }
 
     private initializeScroll(): void {

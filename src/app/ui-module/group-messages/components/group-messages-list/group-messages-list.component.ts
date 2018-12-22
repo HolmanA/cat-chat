@@ -28,15 +28,12 @@ export class GroupMessagesListComponent implements AfterViewInit {
 
     @Input()
     set messagePageList(list: any[]) {
-        console.log('group messages');
-        console.log(list);
         this._messagePageList = list;
         if (this.scrolledToBottom) {
             this.changeDetectorRef.detectChanges();
             this.scrollToBottom();
         } else if (this._scrolledToTop) {
             const message = document.getElementById(`chat-${this.chatId}-page-0-message-0`);
-
             // Scroll to previous top message when more messages are loaded
             if (message) {
                 window.requestAnimationFrame(() => message.scrollIntoView(true));

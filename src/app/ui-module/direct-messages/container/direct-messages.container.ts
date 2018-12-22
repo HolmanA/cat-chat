@@ -20,8 +20,8 @@ export class DirectMessagesContainer implements OnInit {
     @Input()
     set other_user_id(other_user_id: string) {
         this._other_user_id = other_user_id;
-        this.chatDetails$ = this.store.select(SelectedChatsSelectors.getSelectedDirectChatDetails(other_user_id));
-        this.chatMessages$ = this.store.select(SelectedChatsSelectors.getSelectedChatDirectMessages(other_user_id));
+        this.chatDetails$ = this.store.select(SelectedChatsSelectors.getSelectedChatDetails(other_user_id));
+        this.chatMessages$ = this.store.select(SelectedChatsSelectors.getSelectedChatMessages(other_user_id));
         // @Select(SelectedChatsSelectors.getSelectedChatDetails(this.index)) chatDetails$: Observable<any>;
         // @Select(SelectedChatsSelectors.getSelectedChatMessages(this.index)) chatMessages$: Observable<any[]>;
     }
