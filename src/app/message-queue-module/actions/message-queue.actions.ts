@@ -42,7 +42,7 @@ export class ConnectionError {
 }
 
 export class MessageRecievedOpenChat {
-    static readonly type = '[group chats state] message recieved in open chat';
+    static readonly type = '[message queue state] message recieved in open chat';
     /**
 	 * @constructor
 	 * @param chatId the chat ID

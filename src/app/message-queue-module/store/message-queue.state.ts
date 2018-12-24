@@ -88,7 +88,6 @@ export class MessageQueueState {
             patchState({
                 messageQueues: [...messageQueues]
             });
-            console.log(messageQueues);
         } else {
             asapScheduler.schedule(() => dispatch(new MessageQueueStateActions.MessageRecievedOpenChat(messageChatId)));
         }
@@ -97,35 +96,24 @@ export class MessageQueueState {
     @Action(SelectedChatsStateActions.FetchGroupChatSucceeded)
     clearGroupMessageQueue({ getState, patchState }: StateContext<MessageQueueStateModel>, action: SelectedChatsStateActions.FetchGroupChatSucceeded) {
         const messageQueues = getState().messageQueues;
-        console.log(messageQueues);
-        console.log(action);
         const selectedQueueIndex = messageQueues.findIndex(queue => queue.chatId === action.chatId);
         if (selectedQueueIndex >= 0) {
-            console.log(selectedQueueIndex);
-            console.log('here2');
             messageQueues.splice(selectedQueueIndex, 1);
             patchState({
                 messageQueues: [...messageQueues]
             });
         }
-        console.log(messageQueues);
     }
 
     @Action(SelectedChatsStateActions.FetchDirectChatSucceeded)
     clearDirectMessageQueue({ getState, patchState }: StateContext<MessageQueueStateModel>, action: SelectedChatsStateActions.FetchDirectChatSucceeded) {
         const messageQueues = getState().messageQueues;
-        console.log(messageQueues);
-        console.log(action);
-        const selectedQueueIndex = messageQueues.findIndex(queue => queue.queue[0].user_id === action.chatId);
+        const selectedQueueIndex = messageQueues.findIndex(queue => queue.chatId === action.chatId);
         if (selectedQueueIndex >= 0) {
-            console.log(selectedQueueIndex);
-            console.log('here');
             messageQueues.splice(selectedQueueIndex, 1);
-            console.log(messageQueues);
             patchState({
                 messageQueues: [...messageQueues]
             });
         }
-        console.log(messageQueues);
     }
 }

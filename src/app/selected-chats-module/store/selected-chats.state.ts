@@ -149,7 +149,7 @@ export class SelectedChatsState {
                     (event: Event) => dispatch(new SelectedChatsStateActions.ChatChannelConnectionError(directChat.other_user.id, event)),
                     (data: any) => dispatch(new SelectedChatsStateActions.ChatChannelMessageReceived(directChat.other_user.id, data))
                 ));
-                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchDirectChatSucceeded(directChat.other_user.id)));
+                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchDirectChatSucceeded(directChat.last_message.sender_id + '+' + directChat.last_message.recipient_id)));
             }),
             catchError(error => {
                 asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchDirectChatFailed(error)));
@@ -295,7 +295,13 @@ export class SelectedChatsState {
     ])
     fetchNewerMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: MessageQueueStateActions.MessageRecievedOpenChat | SelectedChatsStateActions.CreateMessageSucceeded) {
         const selectedChats = getState().selectedChats;
-        const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
+        let chatIndex = -1;
+
+        for (let i = 0; i < selectedChats.length; i++) {
+            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId) {
+                chatIndex = i;
+            }
+        }
 
         if (chatIndex < 0) {
             // TODO: Create custom alert/ log
@@ -332,20 +338,23 @@ export class SelectedChatsState {
     ])
     fetchNewerDirectMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: MessageQueueStateActions.MessageRecievedOpenChat | SelectedChatsStateActions.CreateMessageSucceeded) {
         const selectedChats = getState().selectedChats;
-        const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
-
+        let chatIndex = -1;
+        for (let i = 0; i < selectedChats.length; i++) {
+            if (selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.last_message.conversation_id === action.chatId) {
+                chatIndex = i;
+            }
+        }
         if (chatIndex < 0) {
             // TODO: Create custom alert/ log
             return;
         }
-
         const selectedChat = selectedChats[chatIndex];
         const newestPage = selectedChat.messages[selectedChat.messages.length - 1];
-        const newestMessageId = newestPage[newestPage.length - 1].id;
+        const newestMessageId = newestPage.direct_messages[newestPage.direct_messages.length - 1].id;
 
         const request: FetchDirectChatRequest = new FetchDirectChatRequest();
-        request.other_user_id = selectedChat.chat.id;
-        request.other_user_id = newestMessageId;
+        request.other_user_id = selectedChat.chat.other_user.id;
+        request.since_id = newestMessageId;
 
         return this.directChatsService.fetchDirectChat(request).pipe(
             tap(messages => {
