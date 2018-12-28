@@ -18,6 +18,9 @@ export class DirectChatsListComponent implements AfterViewInit {
     }
 
     trimMessage(message: string): string {
+        if (message === null) {
+            message = '';
+        }
         const maxLength = 100;
         return message.length > maxLength ? message.substring(0, maxLength).trim() + '...' : message;
     }
