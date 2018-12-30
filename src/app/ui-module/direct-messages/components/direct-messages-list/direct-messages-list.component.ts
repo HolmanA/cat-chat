@@ -38,24 +38,22 @@ export class DirectMessagesListComponent implements AfterViewInit {
 
     @Input()
     set messagePageList(list: any[]) {
-        if (list !== undefined) {
-            const messagePage = [];
-            for (let i = 0; i < list.length; i++) {
-                messagePage[i] = list[i].direct_messages.sort(compareMessages);
+        const messagePage = [];
+        for (let i = 0; i < list.length; i++) {
+            messagePage[i] = list[i].direct_messages.sort(compareMessages);
+        }
+        this._messagePageList = messagePage;
+        if (this.scrolledToBottom) {
+            this.changeDetectorRef.detectChanges();
+            this.scrollToBottom();
+        } else if (this._scrolledToTop) {
+            const message = document.getElementById(`chat-${this.other_user_id}-page-0-direct_message-0`);
+            // Scroll to previous top message when more messages are loaded
+            if (message) {
+                window.requestAnimationFrame(() => message.scrollIntoView(true));
             }
-            this._messagePageList = messagePage;
-            if (this.scrolledToBottom) {
-                this.changeDetectorRef.detectChanges();
-                this.scrollToBottom();
-            } else if (this._scrolledToTop) {
-                const message = document.getElementById(`chat-${this.other_user_id}-page-0-direct_message-0`);
-                // Scroll to previous top message when more messages are loaded
-                if (message) {
-                    window.requestAnimationFrame(() => message.scrollIntoView(true));
-                }
-            } else {
-                this.newMessages = true;
-            }
+        } else {
+            this.newMessages = true;
         }
     }
 
