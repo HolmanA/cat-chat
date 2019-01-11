@@ -55,7 +55,7 @@ export class SelectedChatsState {
         const selectedChats = getState().selectedChats;
         // Close group chat if it is already open
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === groupChat.id) {
+            if (selectedChats[i].type === ChatType.GROUP && selectedChats[i].chat.id === groupChat.id) {
                 this.socketManager.unsubscribeFromChannel(groupChat.id);
                 asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.ChatClosed(i)));
                 return;
@@ -77,7 +77,7 @@ export class SelectedChatsState {
                 // Remove the last chat if exceeding max chats
                 if (selectedChats.length > SelectedChatsState.MAX_CHATS) {
                     const closedChat = selectedChats.pop();
-                    if (closedChat.type === 'GROUP') {
+                    if (closedChat.type === ChatType.GROUP) {
                         this.socketManager.unsubscribeFromChannel(closedChat.chat.id);
                     } else {
                         this.socketManager.unsubscribeFromChannel(closedChat.chat.other_user.id);
@@ -107,10 +107,10 @@ export class SelectedChatsState {
     @Action(DirectChatsContainerActions.DirectChatSelected)
     fetchDirect({ getState, patchState, dispatch }: StateContext<SelectedChatsStateModel>, { directChat }: DirectChatsContainerActions.DirectChatSelected) {
         const selectedChats = getState().selectedChats;
-        const channelId = directChat.last_message.recipient_id + '_' + directChat.last_message.sender_id;
+        const channelId = directChat.last_message.conversation_id.replace('+' , '_');
         // Close direct chat if it is already open
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === directChat.other_user.id) {
+            if (selectedChats[i].type === ChatType.DIRECT && selectedChats[i].chat.other_user.id === directChat.other_user.id) {
                 this.socketManager.unsubscribeFromChannel(directChat.other_user.id);
                 asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.ChatClosed(i)));
                 return;
@@ -132,7 +132,7 @@ export class SelectedChatsState {
                 // Remove the last chat if exceeding max chats
                 if (selectedChats.length > SelectedChatsState.MAX_CHATS) {
                     const closedChat = selectedChats.pop();
-                    if (closedChat.type === 'DIRECT') {
+                    if (closedChat.type === ChatType.DIRECT) {
                         this.socketManager.unsubscribeFromChannel(closedChat.chat.other_user.id);
                     } else {
                         this.socketManager.unsubscribeFromChannel(closedChat.chat.id);
@@ -164,8 +164,8 @@ export class SelectedChatsState {
     connectionOpened({ getState, patchState }: StateContext<SelectedChatsStateModel>, action: SelectedChatsStateActions.ChatChannelConnectionEstablished) {
         const selectedChats = getState().selectedChats;
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId ||
-                selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.GROUP && selectedChats[i].chat.id === action.chatId ||
+                selectedChats[i].type === ChatType.DIRECT && selectedChats[i].chat.other_user.id === action.chatId) {
                 const selectedChat = selectedChats[i];
                 selectedChat.socketConnectionOpen = true;
                 patchState({selectedChats: selectedChats});
@@ -176,10 +176,9 @@ export class SelectedChatsState {
     @Action(SelectedChatsStateActions.ChatChannelConnectionClosed)
     connectionClosed({ getState, patchState }: StateContext<SelectedChatsStateModel>, action: SelectedChatsStateActions.ChatChannelConnectionClosed) {
         const selectedChats = getState().selectedChats;
-        // This section won't do anyting because selectedChats will always clear the selected chat beforehand...
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId ||
-                selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.GROUP && selectedChats[i].chat.id === action.chatId ||
+                selectedChats[i].type === ChatType.DIRECT && selectedChats[i].chat.other_user.id === action.chatId) {
                 const selectedChat = selectedChats[i];
                 selectedChat.socketConnectionOpen = false;
                 patchState({selectedChats: selectedChats});
@@ -203,7 +202,7 @@ export class SelectedChatsState {
         const selectedChats = getState().selectedChats;
         let chatIndex = -1;
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.GROUP && selectedChats[i].chat.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -239,7 +238,7 @@ export class SelectedChatsState {
         const selectedChats = getState().selectedChats;
         let chatIndex = -1;
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.DIRECT && selectedChats[i].chat.other_user.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -277,8 +276,8 @@ export class SelectedChatsState {
         // const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
         let chatIndex = -1;
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId ||
-                selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.GROUP && selectedChats[i].chat.id === action.chatId ||
+                selectedChats[i].type === ChatType.DIRECT && selectedChats[i].chat.other_user.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -290,7 +289,7 @@ export class SelectedChatsState {
 
         let messagePages: any[];
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
-        if (selectedChats[chatIndex].type === 'GROUP') {
+        if (selectedChats[chatIndex].type === ChatType.GROUP) {
             messagePages = selectedChats[chatIndex].messages;
         } else {
             messagePages = Array(selectedChats[chatIndex].messages[0].direct_messages);
@@ -311,7 +310,7 @@ export class SelectedChatsState {
         let chatIndex = -1;
 
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.GROUP && selectedChats[i].chat.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -354,8 +353,8 @@ export class SelectedChatsState {
         let chatIndex = -1;
 
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.last_message.conversation_id === action.chatId ||
-                selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.DIRECT && selectedChats[i].chat.last_message.conversation_id === action.chatId ||
+                selectedChats[i].type === ChatType.DIRECT && selectedChats[i].chat.other_user.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -394,7 +393,7 @@ export class SelectedChatsState {
         let chatIndex = -1;
 
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.GROUP && selectedChats[i].chat.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -431,7 +430,7 @@ export class SelectedChatsState {
         let chatIndex = -1;
 
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.DIRECT && selectedChats[i].chat.other_user.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -466,7 +465,7 @@ export class SelectedChatsState {
         const selectedChats = getState().selectedChats;
         let chatIndex = -1;
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.GROUP && selectedChats[i].chat.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -496,7 +495,7 @@ export class SelectedChatsState {
         const selectedChats = getState().selectedChats;
         let chatIndex = -1;
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.DIRECT && selectedChats[i].chat.other_user.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -512,7 +511,7 @@ export class SelectedChatsState {
 
         let messagePages: any[];
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
-        if (selectedChats[chatIndex].type === 'GROUP') {
+        if (selectedChats[chatIndex].type === ChatType.GROUP) {
              messagePages = selectedChats[chatIndex].messages;
         } else {
             messagePages = Array(selectedChats[chatIndex].messages[0].direct_messages);
@@ -534,7 +533,7 @@ export class SelectedChatsState {
         const selectedChats = getState().selectedChats;
         let chatIndex = -1;
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'GROUP' && selectedChats[i].chat.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.GROUP && selectedChats[i].chat.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -564,7 +563,7 @@ export class SelectedChatsState {
         const selectedChats = getState().selectedChats;
         let chatIndex = -1;
         for (let i = 0; i < selectedChats.length; i++) {
-            if (selectedChats[i].type === 'DIRECT' && selectedChats[i].chat.other_user.id === action.chatId) {
+            if (selectedChats[i].type === ChatType.DIRECT && selectedChats[i].chat.other_user.id === action.chatId) {
                 chatIndex = i;
             }
         }
@@ -610,7 +609,7 @@ export class SelectedChatsState {
         }
 
         let messagePages: any[];
-        if (selectedChats[chatIndex].type === 'GROUP') {
+        if (selectedChats[chatIndex].type === ChatType.GROUP) {
             messagePages = selectedChats[chatIndex].messages;
         } else {
             messagePages = Array(selectedChats[chatIndex].messages[0].direct_messages);

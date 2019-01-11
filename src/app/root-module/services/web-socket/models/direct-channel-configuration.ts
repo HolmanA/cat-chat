@@ -13,6 +13,6 @@ export class DirectChannelConfiguration implements WebSocketConfiguration {
         public messageHandlerFn: (data: any) => any,
     ) {
         this.id = other_user_id;
-        this.subscriptionPath = '/direct_message/' + this.channelId; // '/direct_message/' + this.channelId;
+        this.subscriptionPath = '/direct_message/' + this.channelId;
     }
 }

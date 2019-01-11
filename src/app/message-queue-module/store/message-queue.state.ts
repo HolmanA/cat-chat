@@ -8,6 +8,7 @@ import { SelectedChatsSelectors } from '../../selected-chats-module/store/select
 import { asapScheduler } from 'rxjs';
 import { WebSocketManagerService } from 'src/app/root-module/services/web-socket/web-socket-manager.service';
 import { UserChannelConfiguration } from 'src/app/root-module/services/web-socket/models/user-channel-configuration';
+import { ChatType } from 'src/app/selected-chats-module/store/models/chat-type';
 
 export interface MessageQueueStateModel {
     socketConnectionOpen: boolean;
@@ -65,8 +66,8 @@ export class MessageQueueState {
         let chatOpen: Boolean;
 
         for (let i = 0; i < chats.length; i++) {
-            if (chats[i].type === 'GROUP' && chats[i].chat.id === messageChatId ||
-                chats[i].type === 'DIRECT' && chats[i].chat.last_message.conversation_id === messageChatId) {
+            if (chats[i].type === ChatType.GROUP && chats[i].chat.id === messageChatId ||
+                chats[i].type === ChatType.DIRECT && chats[i].chat.last_message.conversation_id === messageChatId) {
                 chatOpen = true;
             }
         }
@@ -93,20 +94,9 @@ export class MessageQueueState {
         }
     }
 
-    @Action(SelectedChatsStateActions.FetchGroupChatSucceeded)
-    clearGroupMessageQueue({ getState, patchState }: StateContext<MessageQueueStateModel>, action: SelectedChatsStateActions.FetchGroupChatSucceeded) {
-        const messageQueues = getState().messageQueues;
-        const selectedQueueIndex = messageQueues.findIndex(queue => queue.chatId === action.chatId);
-        if (selectedQueueIndex >= 0) {
-            messageQueues.splice(selectedQueueIndex, 1);
-            patchState({
-                messageQueues: [...messageQueues]
-            });
-        }
-    }
-
-    @Action(SelectedChatsStateActions.FetchDirectChatSucceeded)
-    clearDirectMessageQueue({ getState, patchState }: StateContext<MessageQueueStateModel>, action: SelectedChatsStateActions.FetchDirectChatSucceeded) {
+    @Action([SelectedChatsStateActions.FetchGroupChatSucceeded,
+            SelectedChatsStateActions.FetchDirectChatSucceeded])
+    clearMessageQueue({ getState, patchState }: StateContext<MessageQueueStateModel>, action: SelectedChatsStateActions.FetchGroupChatSucceeded | SelectedChatsStateActions.FetchDirectChatSucceeded) {
         const messageQueues = getState().messageQueues;
         const selectedQueueIndex = messageQueues.findIndex(queue => queue.chatId === action.chatId);
         if (selectedQueueIndex >= 0) {

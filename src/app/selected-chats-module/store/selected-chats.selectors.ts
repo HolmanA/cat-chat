@@ -1,8 +1,6 @@
 import { Selector, createSelector } from '@ngxs/store';
 import { SelectedChatsState, SelectedChatsStateModel } from './selected-chats.state';
 import { ChatType } from './models/chat-type';
-import { ChatChannelConnectionClosed } from '../actions/selected-chats.actions';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 /**
  * Selector class for @see GroupChatsState
@@ -53,9 +51,9 @@ export class SelectedChatsSelectors {
     static getSelectedChatDetails(chatId: string) {
         return createSelector([SelectedChatsState], (state: SelectedChatsStateModel) => {
             for (let i = 0; i < state.selectedChats.length; i++) {
-                const chat = state.selectedChats[i]; // .find(c => c.chat.id === chatId);
-                if (chat.type === 'GROUP' && chat.chat.id === chatId ||
-                    chat.type === 'DIRECT' && chat.chat.other_user.id === chatId) {
+                const chat = state.selectedChats[i];
+                if (chat.type === ChatType.GROUP && chat.chat.id === chatId ||
+                    chat.type === ChatType.DIRECT && chat.chat.other_user.id === chatId) {
                         return chat ? chat.chat : null;
                 }
             }
@@ -92,9 +90,9 @@ export class SelectedChatsSelectors {
     static getSelectedChatMessages(chatId: string) {
         return createSelector([SelectedChatsState], (state: SelectedChatsStateModel) => {
             for (let i = 0; i < state.selectedChats.length; i++) {
-                const chat = state.selectedChats[i]; // .find(c => c.chat.id === chatId);
-                if (chat.type === 'GROUP' && chat.chat.id === chatId ||
-                    chat.type === 'DIRECT' && chat.chat.other_user.id === chatId) {
+                const chat = state.selectedChats[i];
+                if (chat.type === ChatType.GROUP && chat.chat.id === chatId ||
+                    chat.type === ChatType.DIRECT && chat.chat.other_user.id === chatId) {
                         return chat ? chat.messages : null;
                 }
             }
