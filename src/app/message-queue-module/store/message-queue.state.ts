@@ -63,14 +63,10 @@ export class MessageQueueState {
         const messageChatId = action.message.group_id || action.message.chat_id;
 
         const chats = this.store.selectSnapshot(SelectedChatsSelectors.getSelectedChats);
-        let chatOpen: Boolean;
-
-        for (let i = 0; i < chats.length; i++) {
-            if (chats[i].type === ChatType.GROUP && chats[i].chat.id === messageChatId ||
-                chats[i].type === ChatType.DIRECT && chats[i].chat.last_message.conversation_id === messageChatId) {
-                chatOpen = true;
-            }
-        }
+        const chatOpen = chats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === messageChatId ||
+                   chat.type === ChatType.DIRECT && chat.chat.last_message.conversation_id === messageChatId;
+        });
 
         // Only queue up message if chat is not open
         if (!chatOpen) {
