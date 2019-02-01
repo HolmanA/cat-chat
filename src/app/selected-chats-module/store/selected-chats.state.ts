@@ -54,13 +54,14 @@ export class SelectedChatsState {
     fetchGroup({ getState, patchState, dispatch }: StateContext<SelectedChatsStateModel>, { groupChat }: GroupChatsContainerActions.GroupChatSelected) {
         const selectedChats = getState().selectedChats;
         // Close group chat if it is already open
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.GROUP && temp.chat.id === groupChat.id) {
-                this.socketManager.unsubscribeFromChannel(groupChat.id);
-                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.ChatClosed(i)));
-                return;
-            }
+        const chatOpen = selectedChats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === groupChat.id;
+        });
+
+        if (chatOpen) {
+            this.socketManager.unsubscribeFromChannel(groupChat.id);
+            asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.ChatClosed(selectedChats.indexOf(chatOpen))));
+            return;
         }
 
         const request = new FetchMessagesRequest();
@@ -110,13 +111,14 @@ export class SelectedChatsState {
         const selectedChats = getState().selectedChats;
         const channelId = directChat.last_message.conversation_id.replace('+' , '_');
         // Close direct chat if it is already open
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.DIRECT && temp.chat.other_user.id === directChat.other_user.id) {
-                this.socketManager.unsubscribeFromChannel(directChat.other_user.id);
-                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.ChatClosed(i)));
-                return;
-            }
+        const chatOpen = selectedChats.find(chat => {
+            return chat.type === ChatType.DIRECT && chat.chat.other_user.id === directChat.other_user.id;
+        });
+
+        if (chatOpen) {
+            this.socketManager.unsubscribeFromChannel(directChat.other_user.id);
+            asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.ChatClosed(selectedChats.indexOf(chatOpen))));
+            return;
         }
 
         const request = new FetchDirectChatRequest();
@@ -153,7 +155,7 @@ export class SelectedChatsState {
                     (event: Event) => dispatch(new SelectedChatsStateActions.ChatChannelConnectionError(directChat.other_user.id, event)),
                     (data: any) => dispatch(new SelectedChatsStateActions.ChatChannelMessageReceived(directChat.other_user.id, data))
                 ));
-                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchDirectChatSucceeded(directChat.last_message.sender_id + '+' + directChat.last_message.recipient_id)));
+                asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchDirectChatSucceeded(directChat.last_message.conversation_id)));
             }),
             catchError(error => {
                 asapScheduler.schedule(() => dispatch(new SelectedChatsStateActions.FetchDirectChatFailed(error)));
@@ -165,26 +167,26 @@ export class SelectedChatsState {
     @Action(SelectedChatsStateActions.ChatChannelConnectionEstablished)
     connectionOpened({ getState, patchState }: StateContext<SelectedChatsStateModel>, action: SelectedChatsStateActions.ChatChannelConnectionEstablished) {
         const selectedChats = getState().selectedChats;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.GROUP && temp.chat.id === action.chatId ||
-                temp.type === ChatType.DIRECT && temp.chat.other_user.id === action.chatId) {
-                temp.socketConnectionOpen = true;
-                patchState({selectedChats: selectedChats});
-            }
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === action.chatId ||
+            chat.type === ChatType.DIRECT && chat.chat.other_user.id === action.chatId;
+        });
+        if (selectedChat) {
+            selectedChat.socketConnectionOpen = true;
+            patchState({selectedChats: selectedChats});
         }
     }
 
     @Action(SelectedChatsStateActions.ChatChannelConnectionClosed)
     connectionClosed({ getState, patchState }: StateContext<SelectedChatsStateModel>, action: SelectedChatsStateActions.ChatChannelConnectionClosed) {
         const selectedChats = getState().selectedChats;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.GROUP && temp.chat.id === action.chatId ||
-                temp.type === ChatType.DIRECT && temp.chat.other_user.id === action.chatId) {
-                temp.socketConnectionOpen = false;
-                patchState({selectedChats: selectedChats});
-            }
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === action.chatId ||
+            chat.type === ChatType.DIRECT && chat.chat.other_user.id === action.chatId;
+        });
+        if (selectedChat) {
+            selectedChat.socketConnectionOpen = false;
+            patchState({selectedChats: selectedChats});
         }
     }
 
@@ -202,18 +204,13 @@ export class SelectedChatsState {
     @Action(GroupMessagesContainerActions.ScrolledToTop)
     loadMoreMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: GroupMessagesContainerActions.ScrolledToTop) {
         const selectedChats = getState().selectedChats;
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.GROUP && temp.chat.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
-
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === action.chatId;
+        });
         if (!selectedChat) {
-            // TODO: Create custom alert/ log
             return;
         }
+
 
         const oldestMessageId = selectedChat.messages[0][0].id;
         const request: FetchMessagesRequest = new FetchMessagesRequest();
@@ -238,16 +235,10 @@ export class SelectedChatsState {
     @Action(DirectMessagesContainerActions.ScrolledToTop)
     loadMoreDirectMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: DirectMessagesContainerActions.ScrolledToTop) {
         const selectedChats = getState().selectedChats;
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.DIRECT && temp.chat.other_user.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
-
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.DIRECT && chat.chat.other_user.id === action.chatId;
+        });
         if (!selectedChat) {
-            // TODO: Create custom alert/ log
             return;
         }
 
@@ -275,28 +266,18 @@ export class SelectedChatsState {
     ])
     messageUnliked({ patchState, getState }: StateContext<SelectedChatsStateModel>, action: SelectedChatsStateActions.UnlikeMessageSucceeded) {
         const selectedChats = getState().selectedChats;
-        // const chatIndex = selectedChats.findIndex(chat => chat.chat.id === action.chatId);
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.GROUP && temp.chat.id === action.chatId ||
-                temp.type === ChatType.DIRECT && temp.chat.other_user.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
-
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === action.chatId ||
+            chat.type === ChatType.DIRECT && chat.chat.other_user.id === action.chatId;
+        });
         if (!selectedChat) {
             // TODO: Create custom alert/ log
             return;
         }
 
-        let messagePages: any[];
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
-        if (selectedChat.type === ChatType.GROUP) {
-            messagePages = selectedChat.messages;
-        } else {
-            messagePages = Array(selectedChat.messages[0].direct_messages);
-        }
+        const messagePages = selectedChat.type === ChatType.GROUP ? selectedChat.messages : Array(selectedChat.messages[0].direct_messages);
+
         this.toggleLike(messagePages, action.messageId, userId);
 
         patchState({
@@ -310,14 +291,9 @@ export class SelectedChatsState {
     ])
     fetchNewerMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: MessageQueueStateActions.MessageRecievedOpenChat | SelectedChatsStateActions.CreateMessageSucceeded) {
         const selectedChats = getState().selectedChats;
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.GROUP && temp.chat.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
-
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === action.chatId;
+        });
         if (!selectedChat) {
             // TODO: Create custom alert/ log
             return;
@@ -352,14 +328,10 @@ export class SelectedChatsState {
     ])
     fetchNewerDirectMessages({ patchState, getState, dispatch }: StateContext<SelectedChatsStateModel>, action: MessageQueueStateActions.MessageRecievedOpenChat | SelectedChatsStateActions.CreateMessageSucceeded) {
         const selectedChats = getState().selectedChats;
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.DIRECT && temp.chat.last_message.conversation_id === action.chatId ||
-                temp.type === ChatType.DIRECT && temp.chat.other_user.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.DIRECT && chat.chat.last_message.conversation_id === action.chatId ||
+            chat.type === ChatType.DIRECT && chat.chat.other_user.id === action.chatId;
+        });
         if (!selectedChat) {
             // TODO: Create custom alert/ log
             return;
@@ -391,14 +363,9 @@ export class SelectedChatsState {
     @Action(GroupMessagesContainerActions.SendMessage)
     sendMessage({ getState, dispatch }: StateContext<SelectedChatsStateModel>, action: GroupMessagesContainerActions.SendMessage) {
         const selectedChats = getState().selectedChats;
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.GROUP && temp.chat.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
-
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === action.chatId;
+        });
         if (!selectedChat) {
             // TODO: Create custom alert/ log
             return;
@@ -427,14 +394,9 @@ export class SelectedChatsState {
     @Action(DirectMessagesContainerActions.SendMessage)
     sendDirectMessage({ getState, dispatch }: StateContext<SelectedChatsStateModel>, action: DirectMessagesContainerActions.SendMessage) {
         const selectedChats = getState().selectedChats;
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.DIRECT && temp.chat.other_user.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
-
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.DIRECT && chat.chat.other_user.id === action.chatId;
+        });
         if (!selectedChat) {
             // TODO: Create custom alert/ log
             return;
@@ -462,14 +424,9 @@ export class SelectedChatsState {
     @Action(GroupMessagesListItemContainerActions.LikeMessage)
     likeMessage({ getState, dispatch }: StateContext<SelectedChatsStateModel>, action: GroupMessagesListItemContainerActions.LikeMessage) {
         const selectedChats = getState().selectedChats;
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.GROUP && temp.chat.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
-
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === action.chatId;
+        });
         if (!selectedChat) {
             // TODO: Create custom alert/ log
             return;
@@ -492,13 +449,9 @@ export class SelectedChatsState {
     @Action(DirectMessagesListItemContainerActions.LikeMessage)
     likeDirectMessage({ getState, dispatch }: StateContext<SelectedChatsStateModel>, action: DirectMessagesListItemContainerActions.LikeMessage) {
         const selectedChats = getState().selectedChats;
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.DIRECT && temp.chat.other_user.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.DIRECT && chat.chat.other_user.id === action.chatId;
+        });
         if (!selectedChat) {
             // TODO: Create custom alert/ log
             return;
@@ -507,14 +460,9 @@ export class SelectedChatsState {
         const request: LikeMessageRequest = new LikeMessageRequest();
         request.conversation_id = selectedChat.chat.last_message.conversation_id;
         request.message_id = action.messageId;
-
-        let messagePages: any[];
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
-        if (selectedChat.type === ChatType.GROUP) {
-             messagePages = selectedChat.messages;
-        } else {
-            messagePages = Array(selectedChat.messages[0].direct_messages);
-        }
+        console.log(selectedChat.messages[0]);
+        const messagePages = selectedChat.type === ChatType.GROUP ? selectedChat.messages : Array(selectedChat.messages[0].direct_messages);
         this.toggleLike(messagePages, action.messageId, userId);
 
         return this.likeMessageService.likeMessage(request).pipe(
@@ -530,14 +478,9 @@ export class SelectedChatsState {
     @Action(GroupMessagesListItemContainerActions.UnlikeMessage)
     unlikeMessage({ getState, dispatch }: StateContext<SelectedChatsStateModel>, action: GroupMessagesListItemContainerActions.UnlikeMessage) {
         const selectedChats = getState().selectedChats;
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.GROUP && temp.chat.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
-
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === action.chatId;
+        });
         if (!selectedChat) {
             // TODO: Create custom alert/ log
             return;
@@ -560,14 +503,9 @@ export class SelectedChatsState {
     @Action(DirectMessagesListItemContainerActions.UnlikeMessage)
     unlikeDirectMessage({ getState, dispatch }: StateContext<SelectedChatsStateModel>, action: DirectMessagesListItemContainerActions.UnlikeMessage) {
         const selectedChats = getState().selectedChats;
-        let selectedChat;
-        for (let i = 0; i < selectedChats.length; i++) {
-            const temp = selectedChats[i];
-            if (temp.type === ChatType.DIRECT && temp.chat.other_user.id === action.chatId) {
-                selectedChat = temp;
-            }
-        }
-
+        const selectedChat = selectedChats.find(chat => {
+            return chat.type === ChatType.DIRECT && chat.chat.other_user.id === action.chatId;
+        });
         if (!selectedChat) {
             // TODO: Create custom alert/ log
             return;
@@ -607,13 +545,8 @@ export class SelectedChatsState {
             return;
         }
 
-        let messagePages: any[];
         const selectedChat = selectedChats[chatIndex];
-        if (selectedChat.type === ChatType.GROUP) {
-            messagePages = selectedChat.messages;
-        } else {
-            messagePages = Array(selectedChat.messages[0].direct_messages);
-        }
+        const messagePages = selectedChat.type === ChatType.GROUP ? selectedChat.messages : Array(selectedChat.messages[0].direct_messages);
         this.toggleLike(messagePages, action.message.line.id, action.message.user_id);
 
         patchState({
