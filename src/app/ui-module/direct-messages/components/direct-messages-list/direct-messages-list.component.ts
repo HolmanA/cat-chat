@@ -1,15 +1,5 @@
 import { Component, Input, ElementRef, AfterViewInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
-function compareMessages(a: any, b: any) {
-    if (a.created_at < b.created_at) {
-      return -1;
-    }
-    if (a.created_at > b.created_at) {
-      return 1;
-    }
-    return 0;
-  }
-
 @Component({
     selector: 'direct-messages-list-component',
     templateUrl: './direct-messages-list.component.html',
@@ -38,11 +28,7 @@ export class DirectMessagesListComponent implements AfterViewInit {
 
     @Input()
     set messagePageList(list: any[]) {
-        const messagePage = [];
-        for (let i = 0; i < list.length; i++) {
-            messagePage[i] = list[i].direct_messages.sort(compareMessages);
-        }
-        this._messagePageList = messagePage;
+        this._messagePageList = list;
         if (this.scrolledToBottom) {
             this.changeDetectorRef.detectChanges();
             this.scrollToBottom();

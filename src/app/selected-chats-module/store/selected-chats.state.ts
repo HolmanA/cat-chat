@@ -123,7 +123,7 @@ export class SelectedChatsState {
 
         const request = new FetchDirectChatRequest();
         request.other_user_id = directChat.other_user.id;
-        return this.directChatsService.fetchDirectChat(request).pipe(
+        return this.directChatsService.fetchDirectChatMessages(request).pipe(
             tap(messages => {
                 // Add the newly opened group chat to the beginning of the selected chats array
                 selectedChats.unshift({
@@ -242,12 +242,12 @@ export class SelectedChatsState {
             return;
         }
 
-        const oldestMessageId = selectedChat.messages[0].direct_messages[0].id;
+        const oldestMessageId = selectedChat.messages[0][0].id;
         const request: FetchDirectChatRequest = new FetchDirectChatRequest();
         request.other_user_id = selectedChat.chat.other_user.id;
         request.before_id = oldestMessageId;
 
-        return this.directChatsService.fetchDirectChat(request).pipe(
+        return this.directChatsService.fetchDirectChatMessages(request).pipe(
             tap(messages => {
                 selectedChat.messages = [messages, ...selectedChat.messages];
                 patchState({
@@ -276,7 +276,7 @@ export class SelectedChatsState {
         }
 
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
-        const messagePages = selectedChat.type === ChatType.GROUP ? selectedChat.messages : Array(selectedChat.messages[0].direct_messages);
+        const messagePages = selectedChat.messages;
 
         this.toggleLike(messagePages, action.messageId, userId);
 
@@ -298,7 +298,6 @@ export class SelectedChatsState {
             // TODO: Create custom alert/ log
             return;
         }
-
         const newestPage = selectedChat.messages[selectedChat.messages.length - 1];
         const newestMessageId = newestPage[newestPage.length - 1].id;
 
@@ -336,15 +335,14 @@ export class SelectedChatsState {
             // TODO: Create custom alert/ log
             return;
         }
-
         const newestPage = selectedChat.messages[selectedChat.messages.length - 1];
-        const newestMessageId = newestPage.direct_messages[newestPage.direct_messages.length - 1].id;
+        const newestMessageId = newestPage[newestPage.length - 1].id;
 
         const request: FetchDirectChatRequest = new FetchDirectChatRequest();
         request.other_user_id = selectedChat.chat.other_user.id;
         request.since_id = newestMessageId;
 
-        return this.directChatsService.fetchDirectChat(request).pipe(
+        return this.directChatsService.fetchDirectChatMessages(request).pipe(
             tap(messages => {
                 selectedChat.messages = [...selectedChat.messages, messages];
 
@@ -461,8 +459,7 @@ export class SelectedChatsState {
         request.conversation_id = selectedChat.chat.last_message.conversation_id;
         request.message_id = action.messageId;
         const userId = this.store.selectSnapshot(UserSelectors.getUserId);
-        console.log(selectedChat.messages[0]);
-        const messagePages = selectedChat.type === ChatType.GROUP ? selectedChat.messages : Array(selectedChat.messages[0].direct_messages);
+        const messagePages = selectedChat.messages;
         this.toggleLike(messagePages, action.messageId, userId);
 
         return this.likeMessageService.likeMessage(request).pipe(
@@ -546,7 +543,7 @@ export class SelectedChatsState {
         }
 
         const selectedChat = selectedChats[chatIndex];
-        const messagePages = selectedChat.type === ChatType.GROUP ? selectedChat.messages : Array(selectedChat.messages[0].direct_messages);
+        const messagePages = selectedChat.messages;
         this.toggleLike(messagePages, action.message.line.id, action.message.user_id);
 
         patchState({

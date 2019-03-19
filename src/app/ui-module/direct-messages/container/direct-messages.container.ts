@@ -22,8 +22,6 @@ export class DirectMessagesContainer implements OnInit {
         this._other_user_id = other_user_id;
         this.chatDetails$ = this.store.select(SelectedChatsSelectors.getSelectedChatDetails(other_user_id));
         this.chatMessages$ = this.store.select(SelectedChatsSelectors.getSelectedChatMessages(other_user_id));
-        // @Select(SelectedChatsSelectors.getSelectedChatDetails(this.index)) chatDetails$: Observable<any>;
-        // @Select(SelectedChatsSelectors.getSelectedChatMessages(this.index)) chatMessages$: Observable<any[]>;
     }
 
     get other_user_id(): string {

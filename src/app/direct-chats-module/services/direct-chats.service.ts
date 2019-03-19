@@ -29,9 +29,12 @@ export class DirectChatsHttpService {
 
     /****************** Direct Messages Endpoint *************************/
 
-    fetchDirectChat(request: FetchDirectChatRequest): Observable<any> {
+     /**
+     * Fetches messages for a specific direct chat
+     */
+    fetchDirectChatMessages(request: FetchDirectChatRequest): Observable<any> {
         return this.httpClient.get<any>(`${this.BASE_URL}/direct_messages?other_user_id=${request.other_user_id}&before_id=${request.before_id}&since_id=${request.since_id}`).pipe(
-            map(response => response.response),
+            map(response => response.response.direct_messages.reverse()),
             catchError(this.handleError)
         );
     }
