@@ -27,7 +27,7 @@ export class DirectChatsHttpService {
         );
     }
 
-    /****************** Direct Messages Endpoint *************************/
+    /****************** Direct Messages Endpoint ************************/
 
      /**
      * Fetches messages for a specific direct chat
