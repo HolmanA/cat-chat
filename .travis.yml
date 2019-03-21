@@ -21,11 +21,11 @@ script:
 - ng lint
 - npm run test -- --watch=false --no-progress --browsers=ChromeHeadlessCI
 - npm run e2e -- --configuration=ci
-deploy:
-  provider: script
-  script: bash scripts/deploy.sh stage
-  on:
-    branch: master
-env:
-  global:
-    secure: y2v8RCPL9y2mYLtb4ek8KfZiqzIQW2Ix+0Di1due4QlkEUKpeUF810oz/ACSp99GBOK5QDzPArEvQ1Ws6Tl3dU8zUOjWd5HHKyLm0Aw/WmvwShsNfCBqesp1gMBzGxEBmr8wV9gBxG/zwJsO/x7BzCkgaiOTeUM/2/8HsIE3X5YYZ4wRNsK+i0G5YiyfDJl6DT4nyIeLto0ggGH7pZMQ5V+BgyDQr4vT2/hYa5IJ2rfG+5GvZvvm5gCF6iPQSblgSe8R6xwcgWlpkWsX+5dwnwUzwbpAl9XYNe+GJwADVFJjOAAaLftbmZW9fYZgGQTP/7oc2AsnFW1fI7M5BeCtEGoPEfxKek81Bl3GZj4T+eF9L3feH7Aor+5FqiHmb73xpy+2EYD15osLn+YjTVc9XVPTDY7cZ4445f3p7a9UdsolWRAfZpeR68Q5R/VBWRcdH4niwXbgZlnitpFT951yYDJRnCEviRIKRy/C6/YCFAKEaF+LFVl2lx0C3dVeUcf1w/cEuSTsuO3qrLfUto3FDfpBa+dvDixh1F4fNgv6O5Mu6s6rcX+KpmPTL4PUtJ2cb6GaG3dnLhzA9F6JM8N8VcF69Z3pcxjMEmQnQcRhXgK61jS9GlQf+oQBNxbtCe+16kWw4iGNnL1g0vnZtkISGJ0iHZlWokBAImfVYpYSu08=
+# deploy:
+#   provider: script
+#   script: bash scripts/deploy.sh stage
+#   on:
+#     branch: master
+# env:
+#   global:
+#     secure: y2v8RCPL9y2mYLtb4ek8KfZiqzIQW2Ix+0Di1due4QlkEUKpeUF810oz/ACSp99GBOK5QDzPArEvQ1Ws6Tl3dU8zUOjWd5HHKyLm0Aw/WmvwShsNfCBqesp1gMBzGxEBmr8wV9gBxG/zwJsO/x7BzCkgaiOTeUM/2/8HsIE3X5YYZ4wRNsK+i0G5YiyfDJl6DT4nyIeLto0ggGH7pZMQ5V+BgyDQr4vT2/hYa5IJ2rfG+5GvZvvm5gCF6iPQSblgSe8R6xwcgWlpkWsX+5dwnwUzwbpAl9XYNe+GJwADVFJjOAAaLftbmZW9fYZgGQTP/7oc2AsnFW1fI7M5BeCtEGoPEfxKek81Bl3GZj4T+eF9L3feH7Aor+5FqiHmb73xpy+2EYD15osLn+YjTVc9XVPTDY7cZ4445f3p7a9UdsolWRAfZpeR68Q5R/VBWRcdH4niwXbgZlnitpFT951yYDJRnCEviRIKRy/C6/YCFAKEaF+LFVl2lx0C3dVeUcf1w/cEuSTsuO3qrLfUto3FDfpBa+dvDixh1F4fNgv6O5Mu6s6rcX+KpmPTL4PUtJ2cb6GaG3dnLhzA9F6JM8N8VcF69Z3pcxjMEmQnQcRhXgK61jS9GlQf+oQBNxbtCe+16kWw4iGNnL1g0vnZtkISGJ0iHZlWokBAImfVYpYSu08=
