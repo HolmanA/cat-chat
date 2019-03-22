@@ -8,6 +8,7 @@ import { SelectedChatsSelectors } from '../../selected-chats-module/store/select
 import { asapScheduler } from 'rxjs';
 import { WebSocketManagerService } from 'src/app/root-module/services/web-socket/web-socket-manager.service';
 import { UserChannelConfiguration } from 'src/app/root-module/services/web-socket/models/user-channel-configuration';
+import { ChatType } from 'src/app/selected-chats-module/store/models/chat-type';
 
 export interface MessageQueueStateModel {
     socketConnectionOpen: boolean;
@@ -62,7 +63,10 @@ export class MessageQueueState {
         const messageChatId = action.message.group_id || action.message.chat_id;
 
         const chats = this.store.selectSnapshot(SelectedChatsSelectors.getSelectedChats);
-        const chatOpen = chats.find(chat => chat.chat.id === messageChatId);
+        const chatOpen = chats.find(chat => {
+            return chat.type === ChatType.GROUP && chat.chat.id === messageChatId ||
+                   chat.type === ChatType.DIRECT && chat.chat.last_message.conversation_id === messageChatId;
+        });
 
         // Only queue up message if chat is not open
         if (!chatOpen) {
@@ -86,8 +90,9 @@ export class MessageQueueState {
         }
     }
 
-    @Action(SelectedChatsStateActions.FetchGroupChatSucceeded)
-    clearMessageQueue({ getState, patchState }: StateContext<MessageQueueStateModel>, action: SelectedChatsStateActions.FetchGroupChatSucceeded) {
+    @Action([SelectedChatsStateActions.FetchGroupChatSucceeded,
+            SelectedChatsStateActions.FetchDirectChatSucceeded])
+    clearMessageQueue({ getState, patchState }: StateContext<MessageQueueStateModel>, action: SelectedChatsStateActions.FetchGroupChatSucceeded | SelectedChatsStateActions.FetchDirectChatSucceeded) {
         const messageQueues = getState().messageQueues;
         const selectedQueueIndex = messageQueues.findIndex(queue => queue.chatId === action.chatId);
         if (selectedQueueIndex >= 0) {

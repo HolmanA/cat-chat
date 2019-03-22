@@ -3,13 +3,13 @@
         <user-container class="user-container"></user-container>
         <div class="chats-container">
             <group-chats-container class="chats-list-container"></group-chats-container>
-            <!-- <direct-chats-container></direct-chats-container> -->
+            <direct-chats-container class="chats-list-container"></direct-chats-container>
         </div>
     </div>
     <div class="body-container">
         <div *ngFor="let chat of selectedChats" class="chat-wrapper">
             <group-messages-container *ngIf="chat.type === 'GROUP'" class="messages-container" [chatId]="chat.chat.id"></group-messages-container>
-            <!-- <direct-messages-container *ngIf="chat.type === 'DIRECT'" class="messages-container" [chatId]="chat.chat.id"></direct-messages-container> -->
+            <direct-messages-container *ngIf="chat.type === 'DIRECT'" class="messages-container" [other_user_id]="chat.chat.other_user.id"></direct-messages-container>
         </div>
     </div>
 </div>

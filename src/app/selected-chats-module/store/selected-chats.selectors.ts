@@ -50,8 +50,13 @@ export class SelectedChatsSelectors {
      */
     static getSelectedChatDetails(chatId: string) {
         return createSelector([SelectedChatsState], (state: SelectedChatsStateModel) => {
-            const chat = state.selectedChats.find(c => c.chat.id === chatId);
-            return chat ? chat.chat : null;
+            for (let i = 0; i < state.selectedChats.length; i++) {
+                const chat = state.selectedChats[i];
+                if (chat.type === ChatType.GROUP && chat.chat.id === chatId ||
+                    chat.type === ChatType.DIRECT && chat.chat.other_user.id === chatId) {
+                        return chat ? chat.chat : null;
+                }
+            }
         });
     }
 
@@ -84,8 +89,13 @@ export class SelectedChatsSelectors {
      */
     static getSelectedChatMessages(chatId: string) {
         return createSelector([SelectedChatsState], (state: SelectedChatsStateModel) => {
-            const chat = state.selectedChats.find(c => c.chat.id === chatId);
-            return chat ? chat.messages : null;
+            for (let i = 0; i < state.selectedChats.length; i++) {
+                const chat = state.selectedChats[i];
+                if (chat.type === ChatType.GROUP && chat.chat.id === chatId ||
+                    chat.type === ChatType.DIRECT && chat.chat.other_user.id === chatId) {
+                        return chat ? chat.messages : null;
+                }
+            }
         });
     }
 

@@ -1,0 +1,11 @@
+<div *ngFor="let page of messagePageList; let i = index" id="chat-{{other_user_id}}-page-{{i}}">
+    <direct-messages-list-item-container *ngFor="let direct_message of page; let j = index" id="chat-{{other_user_id}}-page-{{i}}-direct_message-{{j}}" [other_user_id]="other_user_id" [message]="direct_message"></direct-messages-list-item-container> 
+</div>
+
+<div class="full-width-container">
+    <div class="scroll-to-bottom-container">
+        <button *ngIf="!scrolledToBottom" type="button" (click)="scrollToBottom()" class="scroll-to-bottom" [ngClass]="{'new-messages': newMessages}">
+            <span class="glyphicon glyphicon-arrow-down"></span>
+        </button>
+    </div>
+</div>

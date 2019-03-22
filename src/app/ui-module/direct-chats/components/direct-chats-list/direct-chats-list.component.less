@@ -1,0 +1,68 @@
+@import '../../../../../less/variables.less';
+
+:host {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-title {
+    font-size: 1em;
+    font-weight: normal;
+    opacity: 0.4;
+    padding: @margin-tiny @margin-none;
+}
+
+.chats-container {
+    overflow-y: auto;
+
+    .chat {
+        display: flex;
+        margin: @margin-xsmall @margin-none;
+        padding: @margin-xsmall;
+        justify-content: space-between;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        .preview {
+            flex-grow: 1;
+            margin-left: @margin-small;
+
+            .name {
+                font-size: .9em;
+                font-weight: 600;
+            }
+
+            .message {
+                font-size: 1em;
+                font-weight: normal;
+                opacity: 0.6;
+            }
+        }
+
+        .new-message-counter {
+            align-self: flex-end;
+            font-size: 1em;
+            font-weight: 600;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #E83232 0%, #CA3636 100%);
+            box-shadow: 0 2px 2px 0 rgba(240,172,55,0.5);
+            text-align: center;
+        }
+
+        &.selected {
+            background: linear-gradient(135deg, #D4A61B 0%, #F0AC37 100%);
+            border-radius: 4px;
+
+            .preview {
+                .message {
+                    opacity: 1.0;
+                }
+            }
+        }
+    }
+}

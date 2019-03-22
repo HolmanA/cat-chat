@@ -27,7 +27,6 @@ export class GroupChatsState {
     @Action([GroupChatsContainerActions.Initialized, SelectedChatsStateActions.CreateMessageSucceeded, MessageQueueStateActions.MessageReceived])
     fetchGroups({ patchState, dispatch }: StateContext<GroupChatsStateModel>) {
         const request = new FetchGroupsRequest();
-
         return this.groupChatsService.fetchGroups(request).pipe(
             tap(groupChats => {
                 patchState({
